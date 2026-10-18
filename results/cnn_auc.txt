@@ -1,0 +1,13 @@
+CNN ROC-AUC RESULTS
+===================
+
+adenosis : nan
+ductal_carcinoma : nan
+fibroadenoma : nan
+lobular_carcinoma : nan
+mucinous_carcinoma : nan
+papillary_carcinoma : 0.9945
+phyllodes_tumor : 0.9884
+tubular_adenoma : 0.9881
+
+Micro-average AUC : 0.9913

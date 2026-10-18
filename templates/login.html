@@ -1,0 +1,479 @@
+{% extends "base.html" %}
+
+{% block title %}Login | Breast Cancer XAI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet"
+      href="{{ url_for('static', path='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="login-page">
+
+    <div class="login-container">
+
+        <!-- LEFT SIDE -->
+        <div class="login-info">
+
+            <div class="brand-icon">
+                <i class="fa-solid fa-microscope"></i>
+            </div>
+
+            <h1>Breast Cancer XAI</h1>
+
+            <h2>
+                Explainable Deep Learning
+                for Histopathology
+            </h2>
+
+            <p>
+                An intelligent deep learning platform for
+                multi-class breast cancer classification using
+                histopathological images.
+            </p>
+
+            <div class="feature-list">
+
+                <div class="feature-item">
+                    <i class="fa-solid fa-brain"></i>
+                    <span>Deep Learning Classification</span>
+                </div>
+
+                <div class="feature-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Prediction Confidence</span>
+                </div>
+
+                <div class="feature-item">
+                    <i class="fa-solid fa-eye"></i>
+                    <span>Grad-CAM Explainability</span>
+                </div>
+
+                <div class="feature-item">
+                    <i class="fa-solid fa-file-medical"></i>
+                    <span>Prediction Reports</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+        <div class="login-card">
+
+            <div class="login-header">
+
+                <div class="mobile-logo">
+                    <i class="fa-solid fa-microscope"></i>
+                </div>
+
+                <h2>Welcome Back</h2>
+
+                <p>
+                    Login to access your Breast Cancer XAI dashboard
+                </p>
+
+            </div>
+
+
+            <!-- ERROR MESSAGE -->
+
+            {% if error %}
+
+            <div class="alert alert-danger">
+
+                <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+                {{ error }}
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- LOGIN FORM -->
+
+            <form
+                method="POST"
+                action="{{ url_for('login') }}"
+                id="loginForm"
+            >
+
+                <!-- USERNAME -->
+
+                <div class="form-group">
+
+                    <label for="username">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        Username
+
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-user input-icon"></i>
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            required
+                            value="{{ username if username else '' }}"
+                        >
+
+                    </div>
+
+                    <small
+                        class="error-message"
+                        id="usernameError"
+                    ></small>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        Password
+
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-lock input-icon"></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="togglePassword"
+                            aria-label="Show password"
+                        >
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+
+                    </div>
+
+                    <small
+                        class="error-message"
+                        id="passwordError"
+                    ></small>
+
+                </div>
+
+
+                <!-- REMEMBER -->
+
+                <div class="form-options">
+
+                    <label class="remember-me">
+
+                        <input
+                            type="checkbox"
+                            name="remember"
+                            id="remember"
+                        >
+
+                        <span>Remember me</span>
+
+                    </label>
+
+                </div>
+
+
+                <!-- LOGIN BUTTON -->
+
+                <button
+                    type="submit"
+                    class="login-button"
+                    id="loginButton"
+                >
+
+                    <span id="buttonText">
+
+                        <i class="fa-solid fa-right-to-bracket"></i>
+
+                        Login
+
+                    </span>
+
+                    <span
+                        id="buttonLoader"
+                        style="display:none;"
+                    >
+
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+
+                        Logging in...
+
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <!-- REGISTER -->
+
+            <div class="register-section">
+
+                <p>
+
+                    Don't have an account?
+
+                    <a href="{{ url_for('register') }}">
+                        Create an account
+                    </a>
+
+                </p>
+
+            </div>
+
+
+            <!-- HOME -->
+
+            <div class="back-home">
+
+                <a href="{{ url_for('index') }}">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Back to Home
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form =
+        document.getElementById("loginForm");
+
+    const username =
+        document.getElementById("username");
+
+    const password =
+        document.getElementById("password");
+
+    const usernameError =
+        document.getElementById("usernameError");
+
+    const passwordError =
+        document.getElementById("passwordError");
+
+    const togglePassword =
+        document.getElementById("togglePassword");
+
+    const loginButton =
+        document.getElementById("loginButton");
+
+    const buttonText =
+        document.getElementById("buttonText");
+
+    const buttonLoader =
+        document.getElementById("buttonLoader");
+
+
+    /* =========================
+       SHOW / HIDE PASSWORD
+       ========================= */
+
+    if (togglePassword) {
+
+        togglePassword.addEventListener(
+            "click",
+            function () {
+
+                if (password.type === "password") {
+
+                    password.type = "text";
+
+                    this.innerHTML =
+                        '<i class="fa-solid fa-eye-slash"></i>';
+
+                    this.setAttribute(
+                        "aria-label",
+                        "Hide password"
+                    );
+
+                } else {
+
+                    password.type = "password";
+
+                    this.innerHTML =
+                        '<i class="fa-solid fa-eye"></i>';
+
+                    this.setAttribute(
+                        "aria-label",
+                        "Show password"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =========================
+       USERNAME VALIDATION
+       ========================= */
+
+    function validateUsername() {
+
+        const value =
+            username.value.trim();
+
+        if (value === "") {
+
+            usernameError.textContent =
+                "Please enter your username.";
+
+            username.classList.add(
+                "input-error"
+            );
+
+            return false;
+        }
+
+        usernameError.textContent = "";
+
+        username.classList.remove(
+            "input-error"
+        );
+
+        return true;
+    }
+
+
+    /* =========================
+       PASSWORD VALIDATION
+       ========================= */
+
+    function validatePassword() {
+
+        const value =
+            password.value;
+
+        if (value === "") {
+
+            passwordError.textContent =
+                "Please enter your password.";
+
+            password.classList.add(
+                "input-error"
+            );
+
+            return false;
+        }
+
+        if (value.length < 6) {
+
+            passwordError.textContent =
+                "Password must contain at least 6 characters.";
+
+            password.classList.add(
+                "input-error"
+            );
+
+            return false;
+        }
+
+        passwordError.textContent = "";
+
+        password.classList.remove(
+            "input-error"
+        );
+
+        return true;
+    }
+
+
+    /* =========================
+       LIVE VALIDATION
+       ========================= */
+
+    username.addEventListener(
+        "blur",
+        validateUsername
+    );
+
+    password.addEventListener(
+        "blur",
+        validatePassword
+    );
+
+
+    /* =========================
+       SUBMIT
+       ========================= */
+
+    form.addEventListener(
+        "submit",
+        function (event) {
+
+            const validUsername =
+                validateUsername();
+
+            const validPassword =
+                validatePassword();
+
+            if (
+                !validUsername ||
+                !validPassword
+            ) {
+
+                event.preventDefault();
+
+                return;
+            }
+
+            loginButton.disabled = true;
+
+            buttonText.style.display =
+                "none";
+
+            buttonLoader.style.display =
+                "inline-flex";
+
+        }
+    );
+
+});
+
+</script>
+
+{% endblock %}

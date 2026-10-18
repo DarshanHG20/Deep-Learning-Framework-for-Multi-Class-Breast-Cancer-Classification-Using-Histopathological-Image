@@ -1,0 +1,475 @@
+{% extends "base.html" %}
+
+{% block title %}
+Prediction Result | Breast Cancer XAI
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet"
+      href="{{ url_for('static', path='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container text-center">
+
+        <span class="badge bg-light text-primary mb-3">
+            <i class="fa-solid fa-square-poll-vertical me-2"></i>
+            AI Prediction
+        </span>
+
+        <h1>Prediction Result</h1>
+
+        <p class="mb-0">
+            Deep learning based histopathology image analysis
+        </p>
+
+    </div>
+</section>
+
+
+<section class="py-5 bg-light">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+            <!-- IMAGE -->
+            <div class="col-lg-6">
+
+                <div class="dashboard-card h-100">
+
+                    <div class="card-header-custom">
+
+                        <div>
+                            <h5 class="fw-bold mb-1">
+                                Histopathology Image
+                            </h5>
+
+                            <p class="text-muted small mb-0">
+                                Uploaded sample
+                            </p>
+                        </div>
+
+                        <i class="fa-solid fa-image text-primary fs-3"></i>
+
+                    </div>
+
+                    <div class="p-4 text-center">
+
+                        {% if image_url %}
+
+                        <img
+                            src="{{ image_url }}"
+                            alt="Histopathology Image"
+                            class="img-fluid rounded-4 shadow-sm"
+                            style="
+                                max-height:500px;
+                                width:100%;
+                                object-fit:contain;
+                            "
+                        >
+
+                        {% else %}
+
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fa-solid fa-image"></i>
+                            </div>
+
+                            <p class="text-muted mt-3">
+                                Image preview unavailable.
+                            </p>
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if prediction and prediction.filename %}
+
+                        <p class="text-muted small mt-3 mb-0">
+
+                            <i class="fa-solid fa-file-image me-1"></i>
+
+                            {{ prediction.filename }}
+
+                        </p>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RESULT -->
+            <div class="col-lg-6">
+
+                <div class="dashboard-card h-100">
+
+                    <div class="card-header-custom">
+
+                        <div>
+
+                            <h5 class="fw-bold mb-1">
+                                Classification Result
+                            </h5>
+
+                            <p class="text-muted small mb-0">
+                                Model prediction
+                            </p>
+
+                        </div>
+
+                        <i class="fa-solid fa-brain text-primary fs-3"></i>
+
+                    </div>
+
+
+                    <div class="p-4">
+
+                        <!-- PREDICTION -->
+
+                        <div class="result-card mb-3">
+
+                            <span class="result-label">
+                                Predicted Class
+                            </span>
+
+                            <div class="result-value mt-2">
+
+                                {% if predicted_class %}
+
+                                    {{ predicted_class
+                                        |replace("_", " ")
+                                        |title }}
+
+                                {% else %}
+
+                                    Unknown
+
+                                {% endif %}
+
+                            </div>
+
+
+                            {% if predicted_class in [
+                                "ductal_carcinoma",
+                                "lobular_carcinoma",
+                                "mucinous_carcinoma",
+                                "papillary_carcinoma"
+                            ] %}
+
+                            <div class="mt-2">
+
+                                <span class="badge bg-danger">
+
+                                    <i class="fa-solid fa-triangle-exclamation me-1"></i>
+
+                                    Malignant
+
+                                </span>
+
+                                <small class="text-muted ms-2">
+                                    Malignant subtype predicted
+                                </small>
+
+                            </div>
+
+
+                            {% elif predicted_class in [
+                                "adenosis",
+                                "fibroadenoma",
+                                "phyllodes_tumor",
+                                "tubular_adenoma"
+                            ] %}
+
+                            <div class="mt-2">
+
+                                <span class="badge bg-success">
+
+                                    <i class="fa-solid fa-circle-check me-1"></i>
+
+                                    Benign
+
+                                </span>
+
+                                <small class="text-muted ms-2">
+                                    Benign subtype predicted
+                                </small>
+
+                            </div>
+
+                            {% else %}
+
+                            <div class="mt-2">
+
+                                <span class="badge bg-secondary">
+                                    Unknown
+                                </span>
+
+                            </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- CONFIDENCE -->
+
+                        {% set conf = 0 %}
+
+                        {% if prediction and prediction.confidence is not none %}
+                            {% set conf = prediction.confidence|float %}
+                        {% endif %}
+
+                        <div class="result-card mb-3">
+
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <span class="result-label">
+                                    Confidence
+                                </span>
+
+                                <strong class="fs-4">
+                                    {{ "%.2f"|format(conf) }}%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="progress mt-3"
+                                 style="height:10px;">
+
+                                <div
+                                    class="progress-bar bg-primary"
+                                    role="progressbar"
+                                    style="width: {{ conf }}%;"
+                                    aria-valuenow="{{ conf }}"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MODEL -->
+
+                        <div class="result-card mb-3">
+
+                            <div class="row g-3">
+
+                                <div class="col-6">
+
+                                    <span class="result-label">
+                                        Model
+                                    </span>
+
+                                    <div class="fw-bold mt-1">
+
+                                        {% if prediction and prediction.model_name %}
+                                            {{ prediction.model_name }}
+                                        {% else %}
+                                            ResNet50
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-6">
+
+                                    <span class="result-label">
+                                        Analysis
+                                    </span>
+
+                                    <div class="fw-bold mt-1">
+                                        Deep Learning
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DISCLAIMER -->
+
+                        <div class="alert alert-warning small">
+
+                            <i class="fa-solid fa-circle-info me-2"></i>
+
+                            This system is intended for academic and
+                            research purposes. The prediction should
+                            not be considered a medical diagnosis.
+
+                        </div>
+
+
+                        <!-- ACTIONS -->
+
+                        <div class="d-grid gap-2 mt-4">
+
+                            {% if prediction and prediction.id %}
+
+                            <a
+                                href="{{ url_for(
+                                    'gradcam',
+                                    prediction_id=prediction.id
+                                ) }}"
+                                class="btn btn-primary btn-lg">
+
+                                <i class="fa-solid fa-fire me-2"></i>
+
+                                View Grad-CAM Explanation
+
+                            </a>
+
+
+                            <a
+                                href="{{ url_for(
+                                    'report',
+                                    prediction_id=prediction.id
+                                ) }}"
+                                class="btn btn-outline-dark">
+
+                                <i class="fa-solid fa-file-medical me-2"></i>
+
+                                View Report
+
+                            </a>
+
+                            {% endif %}
+
+
+                            <a
+                                href="{{ url_for('history') }}"
+                                class="btn btn-outline-primary">
+
+                                <i class="fa-solid fa-clock-rotate-left me-2"></i>
+
+                                View Prediction History
+
+                            </a>
+
+
+                            <a
+                                href="{{ url_for('upload') }}"
+                                class="btn btn-outline-secondary">
+
+                                <i class="fa-solid fa-upload me-2"></i>
+
+                                Analyze Another Image
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- XAI -->
+
+        <div class="dashboard-card mt-4">
+
+            <div class="card-header-custom">
+
+                <div>
+
+                    <h5 class="fw-bold mb-1">
+                        Understanding the Result
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+                        Explainable AI workflow
+                    </p>
+
+                </div>
+
+                <i class="fa-solid fa-lightbulb text-primary fs-3"></i>
+
+            </div>
+
+
+            <div class="p-4">
+
+                <div class="row g-4 text-center">
+
+
+                    <div class="col-md-4">
+
+                        <div class="workflow-icon">
+                            <i class="fa-solid fa-image"></i>
+                        </div>
+
+                        <h6 class="fw-bold mt-3">
+                            Input Image
+                        </h6>
+
+                        <p class="small text-muted">
+                            The uploaded histopathology image
+                            is processed before inference.
+                        </p>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <div class="workflow-icon">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+
+                        <h6 class="fw-bold mt-3">
+                            Model Prediction
+                        </h6>
+
+                        <p class="small text-muted">
+                            The selected deep learning model
+                            predicts the histopathology class.
+                        </p>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <div class="workflow-icon">
+                            <i class="fa-solid fa-fire"></i>
+                        </div>
+
+                        <h6 class="fw-bold mt-3">
+                            Visual Explanation
+                        </h6>
+
+                        <p class="small text-muted">
+                            Grad-CAM highlights image regions
+                            that contributed to the prediction.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,385 @@
+{% extends "base.html" %}
+
+{% block title %}Image Preprocessing - Breast Cancer XAI{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Page Header -->
+    <div class="text-center mb-5">
+        <span class="badge bg-primary px-3 py-2 mb-3">
+            <i class="bi bi-sliders"></i> Preprocessing
+        </span>
+
+        <h1 class="fw-bold">
+            Histopathology Image Preprocessing
+        </h1>
+
+        <p class="text-muted mx-auto" style="max-width: 750px;">
+            Images are prepared before classification using resizing,
+            normalization and augmentation techniques to improve model
+            performance and prediction reliability.
+        </p>
+    </div>
+
+
+    <!-- Processing Pipeline -->
+    <div class="row g-4 mb-5">
+
+        <!-- Resize -->
+        <div class="col-md-4">
+            <div class="card preprocessing-card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+
+                    <div class="preprocess-icon">
+                        <i class="bi bi-aspect-ratio"></i>
+                    </div>
+
+                    <h4 class="fw-bold mt-3">
+                        Image Resizing
+                    </h4>
+
+                    <p class="text-muted">
+                        Input images are resized to a fixed dimension
+                        required by the deep learning models.
+                    </p>
+
+                    <div class="process-value">
+                        224 × 224 pixels
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Normalization -->
+        <div class="col-md-4">
+            <div class="card preprocessing-card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+
+                    <div class="preprocess-icon">
+                        <i class="bi bi-bar-chart-line"></i>
+                    </div>
+
+                    <h4 class="fw-bold mt-3">
+                        Normalization
+                    </h4>
+
+                    <p class="text-muted">
+                        Pixel values are normalized so that the models
+                        can process the image efficiently.
+                    </p>
+
+                    <div class="process-value">
+                        Pixel Scaling
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Augmentation -->
+        <div class="col-md-4">
+            <div class="card preprocessing-card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+
+                    <div class="preprocess-icon">
+                        <i class="bi bi-arrow-repeat"></i>
+                    </div>
+
+                    <h4 class="fw-bold mt-3">
+                        Data Augmentation
+                    </h4>
+
+                    <p class="text-muted">
+                        Training images can be transformed using rotation,
+                        flipping and other variations.
+                    </p>
+
+                    <div class="process-value">
+                        Improved Generalization
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Pipeline -->
+    <div class="card border-0 shadow-sm mb-5">
+        <div class="card-body p-4 p-md-5">
+
+            <h3 class="fw-bold text-center mb-5">
+                <i class="bi bi-diagram-3"></i>
+                Preprocessing Pipeline
+            </h3>
+
+            <div class="preprocessing-flow">
+
+                <div class="flow-item">
+                    <div class="flow-number">1</div>
+                    <h5>Input Image</h5>
+                    <p>Histopathology image</p>
+                </div>
+
+                <div class="flow-arrow">
+                    <i class="bi bi-arrow-right"></i>
+                </div>
+
+                <div class="flow-item">
+                    <div class="flow-number">2</div>
+                    <h5>Resize</h5>
+                    <p>224 × 224</p>
+                </div>
+
+                <div class="flow-arrow">
+                    <i class="bi bi-arrow-right"></i>
+                </div>
+
+                <div class="flow-item">
+                    <div class="flow-number">3</div>
+                    <h5>Normalize</h5>
+                    <p>Scale pixel values</p>
+                </div>
+
+                <div class="flow-arrow">
+                    <i class="bi bi-arrow-right"></i>
+                </div>
+
+                <div class="flow-item">
+                    <div class="flow-number">4</div>
+                    <h5>Augment</h5>
+                    <p>Training only</p>
+                </div>
+
+                <div class="flow-arrow">
+                    <i class="bi bi-arrow-right"></i>
+                </div>
+
+                <div class="flow-item">
+                    <div class="flow-number">5</div>
+                    <h5>Model Input</h5>
+                    <p>Ready for prediction</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Techniques -->
+    <div class="row g-4">
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-4">
+                        <i class="bi bi-check-circle-fill text-success"></i>
+                        Preprocessing Techniques
+                    </h4>
+
+                    <div class="technique-item">
+                        <i class="bi bi-check2"></i>
+                        <span>Resize images to a consistent input size</span>
+                    </div>
+
+                    <div class="technique-item">
+                        <i class="bi bi-check2"></i>
+                        <span>Normalize image pixel values</span>
+                    </div>
+
+                    <div class="technique-item">
+                        <i class="bi bi-check2"></i>
+                        <span>Apply image augmentation during training</span>
+                    </div>
+
+                    <div class="technique-item">
+                        <i class="bi bi-check2"></i>
+                        <span>Maintain RGB image representation</span>
+                    </div>
+
+                    <div class="technique-item">
+                        <i class="bi bi-check2"></i>
+                        <span>Prepare tensors for CNN-based models</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-4">
+                        <i class="bi bi-lightbulb-fill text-warning"></i>
+                        Why Preprocessing?
+                    </h4>
+
+                    <p class="text-muted">
+                        Histopathology images may have different dimensions,
+                        pixel distributions and visual variations.
+                    </p>
+
+                    <p class="text-muted">
+                        Preprocessing provides a consistent representation
+                        of the images before they are supplied to the
+                        classification model.
+                    </p>
+
+                    <div class="alert alert-primary mt-4">
+                        <i class="bi bi-info-circle-fill"></i>
+                        <strong>Objective:</strong>
+                        Improve consistency and help the deep learning
+                        model learn meaningful visual patterns.
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Navigation -->
+    <div class="d-flex justify-content-center gap-3 mt-5 flex-wrap">
+
+        <a href="{{ url_for('upload') }}"
+           class="btn btn-primary px-4">
+            <i class="bi bi-cloud-upload"></i>
+            Upload Image
+        </a>
+
+        <a href="{{ url_for('dashboard') }}"
+           class="btn btn-outline-secondary px-4">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+.preprocessing-card {
+    transition: all 0.3s ease;
+    border-radius: 16px;
+}
+
+.preprocessing-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.10) !important;
+}
+
+.preprocess-icon {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 50%;
+    background: rgba(13, 110, 253, 0.10);
+    color: #0d6efd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+}
+
+.process-value {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 7px 15px;
+    border-radius: 20px;
+    background: #f1f5ff;
+    color: #0d6efd;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.preprocessing-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.flow-item {
+    min-width: 130px;
+    text-align: center;
+}
+
+.flow-number {
+    width: 45px;
+    height: 45px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background: #0d6efd;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.flow-item h5 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.flow-item p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.flow-arrow {
+    font-size: 25px;
+    color: #0d6efd;
+}
+
+.technique-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.technique-item:last-child {
+    border-bottom: none;
+}
+
+.technique-item i {
+    color: #198754;
+    font-size: 18px;
+}
+
+@media (max-width: 768px) {
+
+    .flow-arrow {
+        transform: rotate(90deg);
+    }
+
+    .preprocessing-flow {
+        flex-direction: column;
+    }
+
+}
+
+</style>
+
+{% endblock %}

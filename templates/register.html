@@ -1,0 +1,591 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account | Breast Cancer XAI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet"
+      href="{{ url_for('static', path='css/register.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="register-page">
+
+    <div class="register-container">
+
+        <!-- LEFT -->
+        <div class="register-info">
+
+            <div class="register-icon">
+                <i class="fa-solid fa-user-doctor"></i>
+            </div>
+
+            <h1>Breast Cancer XAI</h1>
+
+            <h2>Create Your Account</h2>
+
+            <p>
+                Create an account to access the intelligent
+                histopathological image analysis platform.
+            </p>
+
+            <div class="register-features">
+
+                <div>
+                    <i class="fa-solid fa-microscope"></i>
+                    <span>Histopathology Analysis</span>
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-brain"></i>
+                    <span>Deep Learning Models</span>
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Confidence Scores</span>
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-eye"></i>
+                    <span>Grad-CAM Explainability</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT -->
+        <div class="register-card">
+
+            <div class="register-header">
+
+                <div class="register-mobile-icon">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+
+                <h2>Create Account</h2>
+
+                <p>
+                    Register to start analyzing histopathological images
+                </p>
+
+            </div>
+
+
+            {% if error %}
+
+            <div class="alert alert-danger">
+
+                <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+                {{ error }}
+
+            </div>
+
+            {% endif %}
+
+
+            <form
+                method="POST"
+                action="{{ url_for('register') }}"
+                id="registerForm"
+            >
+
+                <!-- USERNAME -->
+
+                <div class="register-form-group">
+
+                    <label for="username">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        Username
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        class="form-control"
+                        placeholder="Enter username"
+                        autocomplete="username"
+                        minlength="3"
+                        maxlength="100"
+                        required
+                        value="{{ username if username else '' }}"
+                    >
+
+                    <small id="usernameError"></small>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="register-form-group">
+
+                    <label for="email">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        Email Address
+
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="Enter email address"
+                        autocomplete="email"
+                        maxlength="150"
+                        required
+                        value="{{ email if email else '' }}"
+                    >
+
+                    <small id="emailError"></small>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="register-form-group">
+
+                    <label for="password">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        Password
+
+                    </label>
+
+                    <div class="register-password">
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-control"
+                            placeholder="Create password"
+                            autocomplete="new-password"
+                            minlength="4"
+                            maxlength="100"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="togglePassword"
+                        >
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+
+                    </div>
+
+                    <small id="passwordError"></small>
+
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="register-form-group">
+
+                    <label for="confirm_password">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        Confirm Password
+
+                    </label>
+
+                    <div class="register-password">
+
+                        <input
+                            type="password"
+                            id="confirm_password"
+                            name="confirm_password"
+                            class="form-control"
+                            placeholder="Confirm password"
+                            autocomplete="new-password"
+                            minlength="4"
+                            maxlength="100"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="toggleConfirmPassword"
+                        >
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+
+                    </div>
+
+                    <small id="confirmPasswordError"></small>
+
+                </div>
+
+
+                <!-- TERMS -->
+
+                <div class="terms-check">
+
+                    <input
+                        type="checkbox"
+                        id="terms"
+                        required
+                    >
+
+                    <label for="terms">
+
+                        I agree to use this system for
+                        academic/research purposes.
+
+                    </label>
+
+                </div>
+
+
+                <!-- BUTTON -->
+
+                <button
+                    type="submit"
+                    class="register-button"
+                    id="registerButton"
+                >
+
+                    <span id="registerText">
+
+                        <i class="fa-solid fa-user-plus me-2"></i>
+
+                        Create Account
+
+                    </span>
+
+                    <span
+                        id="registerLoader"
+                        style="display:none;"
+                    >
+
+                        <i class="fa-solid fa-spinner fa-spin me-2"></i>
+
+                        Creating Account...
+
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <!-- LOGIN -->
+
+            <div class="login-link">
+
+                <p>
+
+                    Already have an account?
+
+                    <a href="{{ url_for('login') }}">
+                        Login here
+                    </a>
+
+                </p>
+
+            </div>
+
+
+            <div class="register-back">
+
+                <a href="{{ url_for('index') }}">
+
+                    <i class="fa-solid fa-arrow-left me-1"></i>
+
+                    Back to Home
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form =
+        document.getElementById("registerForm");
+
+    const password =
+        document.getElementById("password");
+
+    const confirmPassword =
+        document.getElementById("confirm_password");
+
+    const togglePassword =
+        document.getElementById("togglePassword");
+
+    const toggleConfirmPassword =
+        document.getElementById("toggleConfirmPassword");
+
+    const username =
+        document.getElementById("username");
+
+    const email =
+        document.getElementById("email");
+
+    const usernameError =
+        document.getElementById("usernameError");
+
+    const emailError =
+        document.getElementById("emailError");
+
+    const passwordError =
+        document.getElementById("passwordError");
+
+    const confirmPasswordError =
+        document.getElementById("confirmPasswordError");
+
+    const button =
+        document.getElementById("registerButton");
+
+    const registerText =
+        document.getElementById("registerText");
+
+    const registerLoader =
+        document.getElementById("registerLoader");
+
+
+    /* PASSWORD SHOW/HIDE */
+
+    togglePassword.addEventListener(
+        "click",
+        function () {
+
+            if (password.type === "password") {
+
+                password.type = "text";
+
+                this.innerHTML =
+                    '<i class="fa-solid fa-eye-slash"></i>';
+
+            } else {
+
+                password.type = "password";
+
+                this.innerHTML =
+                    '<i class="fa-solid fa-eye"></i>';
+
+            }
+
+        }
+    );
+
+
+    /* CONFIRM PASSWORD SHOW/HIDE */
+
+    toggleConfirmPassword.addEventListener(
+        "click",
+        function () {
+
+            if (confirmPassword.type === "password") {
+
+                confirmPassword.type = "text";
+
+                this.innerHTML =
+                    '<i class="fa-solid fa-eye-slash"></i>';
+
+            } else {
+
+                confirmPassword.type = "password";
+
+                this.innerHTML =
+                    '<i class="fa-solid fa-eye"></i>';
+
+            }
+
+        }
+    );
+
+
+    /* VALIDATE USERNAME */
+
+    function validateUsername() {
+
+        if (username.value.trim().length < 3) {
+
+            usernameError.textContent =
+                "Username must contain at least 3 characters.";
+
+            username.classList.add("register-error");
+
+            return false;
+        }
+
+        usernameError.textContent = "";
+
+        username.classList.remove("register-error");
+
+        return true;
+    }
+
+
+    /* VALIDATE EMAIL */
+
+    function validateEmail() {
+
+        const emailPattern =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(email.value.trim())) {
+
+            emailError.textContent =
+                "Please enter a valid email address.";
+
+            email.classList.add("register-error");
+
+            return false;
+        }
+
+        emailError.textContent = "";
+
+        email.classList.remove("register-error");
+
+        return true;
+    }
+
+
+    /* VALIDATE PASSWORD */
+
+    function validatePassword() {
+
+        if (password.value.length < 4) {
+
+            passwordError.textContent =
+                "Password must contain at least 4 characters.";
+
+            password.classList.add("register-error");
+
+            return false;
+        }
+
+        passwordError.textContent = "";
+
+        password.classList.remove("register-error");
+
+        return true;
+    }
+
+
+    /* CONFIRM PASSWORD */
+
+    function validateConfirmPassword() {
+
+        if (
+            confirmPassword.value !==
+            password.value
+        ) {
+
+            confirmPasswordError.textContent =
+                "Passwords do not match.";
+
+            confirmPassword.classList.add(
+                "register-error"
+            );
+
+            return false;
+        }
+
+        confirmPasswordError.textContent = "";
+
+        confirmPassword.classList.remove(
+            "register-error"
+        );
+
+        return true;
+    }
+
+
+    username.addEventListener(
+        "blur",
+        validateUsername
+    );
+
+    email.addEventListener(
+        "blur",
+        validateEmail
+    );
+
+    password.addEventListener(
+        "blur",
+        validatePassword
+    );
+
+    confirmPassword.addEventListener(
+        "blur",
+        validateConfirmPassword
+    );
+
+
+    /* SUBMIT */
+
+    form.addEventListener(
+        "submit",
+        function (event) {
+
+            const validUsername =
+                validateUsername();
+
+            const validEmail =
+                validateEmail();
+
+            const validPassword =
+                validatePassword();
+
+            const validConfirm =
+                validateConfirmPassword();
+
+            if (
+                !validUsername ||
+                !validEmail ||
+                !validPassword ||
+                !validConfirm
+            ) {
+
+                event.preventDefault();
+
+                return;
+            }
+
+
+            button.disabled = true;
+
+            registerText.style.display =
+                "none";
+
+            registerLoader.style.display =
+                "inline-flex";
+
+        }
+    );
+
+});
+
+</script>
+
+{% endblock %}

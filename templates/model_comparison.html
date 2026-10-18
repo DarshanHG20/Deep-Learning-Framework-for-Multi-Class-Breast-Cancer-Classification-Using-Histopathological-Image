@@ -1,0 +1,920 @@
+{% extends "base.html" %}
+
+{% block title %}Model Comparison - Breast Cancer XAI{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Header -->
+    <div class="text-center mb-5">
+
+        <span class="badge bg-primary px-3 py-2 mb-3">
+            <i class="bi bi-bar-chart-line"></i>
+            Model Evaluation
+        </span>
+
+        <h1 class="fw-bold">
+            Deep Learning Model Comparison
+        </h1>
+
+        <p class="text-muted mx-auto" style="max-width: 760px;">
+            Compare the performance of different deep learning models
+            used for breast cancer histopathology image classification.
+        </p>
+
+    </div>
+
+
+    <!-- Best Model -->
+    <div class="best-model-card mb-5">
+
+        <div class="best-model-icon">
+            <i class="bi bi-trophy-fill"></i>
+        </div>
+
+        <div class="flex-grow-1">
+
+            <span class="small text-uppercase">
+                Recommended Model
+            </span>
+
+            <h3 class="fw-bold mb-1">
+                {{ best_model if best_model is defined else 'ResNet50' }}
+            </h3>
+
+            <p class="mb-0">
+                Selected based on overall evaluation performance.
+            </p>
+
+        </div>
+
+        <div class="best-score">
+
+            <span>Accuracy</span>
+
+            <strong>
+                {% if best_accuracy is defined %}
+                    {{ "%.2f"|format(best_accuracy * 100) }}%
+                {% else %}
+                    94.50%
+                {% endif %}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- Metric Cards -->
+    <div class="row g-4 mb-5">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="metric-card">
+
+                <div class="metric-icon">
+                    <i class="bi bi-bullseye"></i>
+                </div>
+
+                <span>Accuracy</span>
+
+                <strong>
+                    {{ "%.2f"|format(
+                        accuracy * 100
+                    ) if accuracy is defined else '94.50'
+                    }}%
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="metric-card">
+
+                <div class="metric-icon">
+                    <i class="bi bi-crosshair"></i>
+                </div>
+
+                <span>Precision</span>
+
+                <strong>
+                    {{ "%.2f"|format(
+                        precision * 100
+                    ) if precision is defined else '93.80'
+                    }}%
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="metric-card">
+
+                <div class="metric-icon">
+                    <i class="bi bi-arrow-repeat"></i>
+                </div>
+
+                <span>Recall</span>
+
+                <strong>
+                    {{ "%.2f"|format(
+                        recall * 100
+                    ) if recall is defined else '92.90'
+                    }}%
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="metric-card">
+
+                <div class="metric-icon">
+                    <i class="bi bi-speedometer2"></i>
+                </div>
+
+                <span>F1 Score</span>
+
+                <strong>
+                    {{ "%.2f"|format(
+                        f1_score * 100
+                    ) if f1_score is defined else '93.35'
+                    }}%
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Comparison Table -->
+    <div class="card border-0 shadow-sm mb-5">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between
+                        align-items-center flex-wrap gap-2 mb-4">
+
+                <div>
+
+                    <h3 class="fw-bold mb-1">
+                        Performance Comparison
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Evaluation metrics across trained models
+                    </p>
+
+                </div>
+
+                <span class="badge bg-light text-dark">
+                    Test Dataset
+                </span>
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table class="table comparison-table align-middle">
+
+                    <thead>
+
+                        <tr>
+                            <th>Model</th>
+                            <th>Accuracy</th>
+                            <th>Precision</th>
+                            <th>Recall</th>
+                            <th>F1 Score</th>
+                            <th>Rank</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% if model_results %}
+
+                        {% for model in model_results %}
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    {{ model.model_name }}
+                                </strong>
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(
+                                    model.accuracy * 100
+                                ) }}%
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(
+                                    model.precision * 100
+                                ) }}%
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(
+                                    model.recall * 100
+                                ) }}%
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(
+                                    model.f1_score * 100
+                                ) }}%
+                            </td>
+
+                            <td>
+                                <span class="rank-badge">
+                                    #{{ loop.index }}
+                                </span>
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <!-- Demo values until MySQL backend is connected -->
+
+                        <tr>
+
+                            <td>
+                                <strong>ResNet50</strong>
+                            </td>
+
+                            <td>94.50%</td>
+                            <td>93.80%</td>
+                            <td>92.90%</td>
+                            <td>93.35%</td>
+
+                            <td>
+                                <span class="rank-badge first">
+                                    #1
+                                </span>
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>CNN</strong>
+                            </td>
+
+                            <td>91.20%</td>
+                            <td>90.60%</td>
+                            <td>89.80%</td>
+                            <td>90.20%</td>
+
+                            <td>
+                                <span class="rank-badge">
+                                    #2
+                                </span>
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>VGG16</strong>
+                            </td>
+
+                            <td>89.70%</td>
+                            <td>88.90%</td>
+                            <td>88.10%</td>
+                            <td>88.50%</td>
+
+                            <td>
+                                <span class="rank-badge">
+                                    #3
+                                </span>
+                            </td>
+
+                        </tr>
+
+                    {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Charts -->
+    <div class="row g-4 mb-5">
+
+        <!-- Accuracy Chart -->
+        <div class="col-lg-6">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-1">
+                        <i class="bi bi-bar-chart-fill text-primary"></i>
+                        Accuracy Comparison
+                    </h4>
+
+                    <p class="text-muted small">
+                        Model accuracy on the evaluation dataset
+                    </p>
+
+                    <div class="chart-container">
+                        <canvas id="accuracyChart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Metrics Chart -->
+        <div class="col-lg-6">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-1">
+                        <i class="bi bi-graph-up text-success"></i>
+                        Metric Comparison
+                    </h4>
+
+                    <p class="text-muted small">
+                        Precision, recall and F1-score
+                    </p>
+
+                    <div class="chart-container">
+                        <canvas id="metricsChart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Model Descriptions -->
+    <div class="section-heading text-center mb-4">
+
+        <h3 class="fw-bold">
+            Model Architectures
+        </h3>
+
+        <p class="text-muted">
+            Overview of the models used in the project
+        </p>
+
+    </div>
+
+
+    <div class="row g-4 mb-5">
+
+        <!-- CNN -->
+        <div class="col-lg-4">
+
+            <div class="architecture-card h-100">
+
+                <div class="architecture-icon">
+                    <i class="bi bi-grid-3x3-gap"></i>
+                </div>
+
+                <h4 class="fw-bold">
+                    CNN
+                </h4>
+
+                <p class="text-muted">
+                    A custom Convolutional Neural Network designed
+                    to learn important visual patterns from
+                    histopathology images.
+                </p>
+
+                <div class="architecture-tags">
+                    <span>Convolution</span>
+                    <span>Pooling</span>
+                    <span>Dense Layers</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ResNet -->
+        <div class="col-lg-4">
+
+            <div class="architecture-card featured h-100">
+
+                <div class="architecture-icon">
+                    <i class="bi bi-diagram-3"></i>
+                </div>
+
+                <span class="featured-label">
+                    Recommended
+                </span>
+
+                <h4 class="fw-bold">
+                    ResNet50
+                </h4>
+
+                <p class="text-muted">
+                    A deep residual network that uses skip connections
+                    to support efficient training of deeper models.
+                </p>
+
+                <div class="architecture-tags">
+                    <span>Residual Blocks</span>
+                    <span>Transfer Learning</span>
+                    <span>Deep CNN</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- VGG -->
+        <div class="col-lg-4">
+
+            <div class="architecture-card h-100">
+
+                <div class="architecture-icon">
+                    <i class="bi bi-layers"></i>
+                </div>
+
+                <h4 class="fw-bold">
+                    VGG16
+                </h4>
+
+                <p class="text-muted">
+                    A deep convolutional architecture with stacked
+                    convolution layers for extracting hierarchical
+                    image features.
+                </p>
+
+                <div class="architecture-tags">
+                    <span>Deep CNN</span>
+                    <span>Transfer Learning</span>
+                    <span>Feature Extraction</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Evaluation Note -->
+    <div class="alert alert-info evaluation-note">
+
+        <i class="bi bi-info-circle-fill"></i>
+
+        <div>
+
+            <strong>Evaluation Note</strong>
+
+            <p class="mb-0 mt-1">
+                The final model comparison values should be populated
+                from the evaluation results generated by the trained
+                models. The demonstration values shown above are
+                placeholders until the training and evaluation modules
+                are connected to the database.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Navigation -->
+    <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+
+        <a href="{{ url_for('dashboard') }}"
+           class="btn btn-outline-secondary px-4">
+
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
+
+        </a>
+
+        <a href="{{ url_for('upload') }}"
+           class="btn btn-primary px-4">
+
+            <i class="bi bi-cloud-upload"></i>
+            Test New Image
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+.best-model-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 25px;
+    border-radius: 18px;
+    background: linear-gradient(
+        135deg,
+        #0d6efd,
+        #4f8dfd
+    );
+    color: white;
+    box-shadow: 0 10px 30px rgba(13, 110, 253, 0.20);
+}
+
+.best-model-icon {
+    width: 65px;
+    height: 65px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 29px;
+}
+
+.best-model-card .small {
+    opacity: 0.8;
+    letter-spacing: 1px;
+}
+
+.best-score {
+    text-align: right;
+    padding-left: 20px;
+    border-left: 1px solid rgba(255,255,255,0.25);
+}
+
+.best-score span {
+    display: block;
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.best-score strong {
+    font-size: 28px;
+}
+
+.metric-card {
+    height: 100%;
+    padding: 22px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.metric-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: rgba(13, 110, 253, 0.10);
+    color: #0d6efd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+}
+
+.metric-card span {
+    display: block;
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.metric-card strong {
+    display: block;
+    font-size: 21px;
+    margin-top: 2px;
+}
+
+.comparison-table {
+    margin-bottom: 0;
+}
+
+.comparison-table thead th {
+    background: #f8f9fa;
+    color: #495057;
+    font-size: 13px;
+    padding: 15px;
+    white-space: nowrap;
+}
+
+.comparison-table tbody td {
+    padding: 17px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    padding: 6px 9px;
+    border-radius: 20px;
+    background: #f1f3f5;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.rank-badge.first {
+    background: #fff3cd;
+    color: #997404;
+}
+
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin-top: 20px;
+}
+
+.architecture-card {
+    position: relative;
+    padding: 28px;
+    border-radius: 16px;
+    background: white;
+    border: 1px solid #eee;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.architecture-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.09);
+}
+
+.architecture-card.featured {
+    border: 2px solid #0d6efd;
+}
+
+.architecture-icon {
+    width: 55px;
+    height: 55px;
+    margin-bottom: 18px;
+    border-radius: 13px;
+    background: rgba(13, 110, 253, 0.10);
+    color: #0d6efd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.featured-label {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 5px 9px;
+    border-radius: 15px;
+    background: #e7f1ff;
+    color: #0d6efd;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.architecture-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 20px;
+}
+
+.architecture-tags span {
+    padding: 5px 9px;
+    border-radius: 15px;
+    background: #f1f3f5;
+    color: #495057;
+    font-size: 11px;
+}
+
+.evaluation-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px;
+}
+
+@media (max-width: 768px) {
+
+    .best-model-card {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .best-score {
+        width: 100%;
+        text-align: left;
+        border-left: none;
+        border-top: 1px solid rgba(255,255,255,0.25);
+        padding-left: 0;
+        padding-top: 15px;
+    }
+
+    .chart-container {
+        height: 250px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    /*
+     * Demo values.
+     * Later these will come from the MySQL model_performance table.
+     */
+
+    const modelNames = [
+        "ResNet50",
+        "CNN",
+        "VGG16"
+    ];
+
+    const accuracyValues = [
+        94.5,
+        91.2,
+        89.7
+    ];
+
+    const precisionValues = [
+        93.8,
+        90.6,
+        88.9
+    ];
+
+    const recallValues = [
+        92.9,
+        89.8,
+        88.1
+    ];
+
+    const f1Values = [
+        93.35,
+        90.2,
+        88.5
+    ];
+
+
+    /* Accuracy Chart */
+
+    const accuracyCanvas =
+        document.getElementById("accuracyChart");
+
+    if (accuracyCanvas) {
+
+        new Chart(
+            accuracyCanvas,
+            {
+                type: "bar",
+
+                data: {
+                    labels: modelNames,
+
+                    datasets: [{
+                        label: "Accuracy (%)",
+                        data: accuracyValues,
+                        borderWidth: 1
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 80,
+                            max: 100
+                        }
+                    },
+
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        );
+
+    }
+
+
+    /* Metrics Chart */
+
+    const metricsCanvas =
+        document.getElementById("metricsChart");
+
+    if (metricsCanvas) {
+
+        new Chart(
+            metricsCanvas,
+            {
+                type: "bar",
+
+                data: {
+                    labels: modelNames,
+
+                    datasets: [
+
+                        {
+                            label: "Precision (%)",
+                            data: precisionValues,
+                            borderWidth: 1
+                        },
+
+                        {
+                            label: "Recall (%)",
+                            data: recallValues,
+                            borderWidth: 1
+                        },
+
+                        {
+                            label: "F1 Score (%)",
+                            data: f1Values,
+                            borderWidth: 1
+                        }
+
+                    ]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 75,
+                            max: 100
+                        }
+                    }
+                }
+            }
+        );
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

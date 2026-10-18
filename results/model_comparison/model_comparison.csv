@@ -1,0 +1,4 @@
+Model,Accuracy,Precision,Recall,F1 Score,Macro AUC
+CNN,80.49,84.67,80.49,81.03,97.95
+ResNet50,84.41,84.76,84.41,83.44,98.35
+EfficientNetB0,60.14,62.82,60.14,52.17,89.14

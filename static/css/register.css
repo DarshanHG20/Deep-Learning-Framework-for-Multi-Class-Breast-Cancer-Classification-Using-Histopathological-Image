@@ -1,0 +1,348 @@
+.register-page {
+    min-height: calc(100vh - 78px);
+
+    padding: 60px 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f7f4ff,
+            #eef8ff
+        );
+}
+
+.register-container {
+    max-width: 1050px;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    background: white;
+
+    border-radius: 25px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 25px 70px
+        rgba(30, 35, 70, 0.12);
+}
+
+
+/* LEFT */
+
+.register-info {
+    padding: 55px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            145deg,
+            #6530dc,
+            #9144ef
+        );
+}
+
+.register-icon {
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background:
+        rgba(255,255,255,.18);
+
+    font-size: 30px;
+}
+
+.register-info h1 {
+    margin-top: 30px;
+
+    font-size: 35px;
+
+    font-weight: 800;
+}
+
+.register-info h2 {
+    margin-top: 20px;
+
+    font-size: 23px;
+}
+
+.register-info p {
+    margin-top: 18px;
+
+    color: #eee8ff;
+}
+
+.register-features {
+    margin-top: 35px;
+}
+
+.register-features div {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin: 20px 0;
+
+    font-weight: 600;
+}
+
+.register-features i {
+    width: 30px;
+
+    text-align: center;
+
+    font-size: 18px;
+}
+
+
+/* RIGHT */
+
+.register-card {
+    padding: 48px;
+}
+
+.register-header {
+    text-align: center;
+
+    margin-bottom: 28px;
+}
+
+.register-header h2 {
+    margin-top: 12px;
+
+    font-weight: 800;
+
+    color: #172238;
+}
+
+.register-header p {
+    color: #7a8595;
+
+    font-size: 14px;
+}
+
+.register-mobile-icon {
+    display: none;
+}
+
+
+/* FORM */
+
+.register-form-group {
+    margin-bottom: 18px;
+}
+
+.register-form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-weight: 700;
+
+    color: #29364a;
+}
+
+.register-form-group label i {
+    color: #7137e4;
+
+    margin-right: 6px;
+}
+
+.register-form-group .form-control {
+    min-height: 47px;
+
+    border-radius: 9px;
+
+    border: 1px solid #dce1e8;
+}
+
+.register-form-group .form-control:focus {
+    border-color: #7137e4;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(113,55,228,.11);
+}
+
+.register-form-group small {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #dc3545;
+}
+
+.register-password {
+    position: relative;
+}
+
+.register-password input {
+    padding-right: 48px;
+}
+
+.register-password button {
+    position: absolute;
+
+    right: 10px;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    border: none;
+
+    background: none;
+
+    color: #7d8796;
+
+    cursor: pointer;
+}
+
+.register-error {
+    border-color:
+        #dc3545 !important;
+}
+
+
+/* TERMS */
+
+.terms-check {
+    display: flex;
+
+    gap: 9px;
+
+    align-items: flex-start;
+
+    margin: 18px 0;
+
+    color: #687486;
+
+    font-size: 13px;
+}
+
+.terms-check input {
+    margin-top: 4px;
+}
+
+
+/* BUTTON */
+
+.register-button {
+    width: 100%;
+
+    min-height: 50px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7137e4,
+            #9144ef
+        );
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 750;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 9px 22px
+        rgba(113,55,228,.20);
+}
+
+.register-button:hover {
+    transform:
+        translateY(-1px);
+}
+
+.register-button:disabled {
+    opacity: .7;
+
+    cursor: not-allowed;
+}
+
+
+/* LOGIN */
+
+.login-link {
+    text-align: center;
+
+    margin-top: 24px;
+
+    color: #6d7787;
+}
+
+.login-link a,
+.register-back a {
+    color: #7137e4;
+
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+.register-back {
+    text-align: center;
+
+    margin-top: 18px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 800px) {
+
+    .register-container {
+        grid-template-columns: 1fr;
+    }
+
+    .register-info {
+        display: none;
+    }
+
+    .register-card {
+        padding: 35px 25px;
+    }
+
+    .register-mobile-icon {
+        width: 60px;
+        height: 60px;
+
+        margin: auto;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 16px;
+
+        background: #eee7ff;
+
+        color: #7137e4;
+
+        font-size: 24px;
+    }
+
+}

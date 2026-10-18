@@ -1,0 +1,581 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction Report - Breast Cancer XAI{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <span class="badge bg-primary px-3 py-2 mb-3">
+            <i class="bi bi-file-earmark-medical"></i>
+            AI Prediction Report
+        </span>
+
+        <h1 class="fw-bold">Breast Cancer Classification Report</h1>
+
+        <p class="text-muted">
+            Detailed prediction, confidence and explainability information
+        </p>
+    </div>
+
+
+    <!-- Report Card -->
+    <div class="card border-0 shadow-sm report-card">
+
+        <div class="card-body p-4 p-md-5">
+
+            <!-- Report Top -->
+            <div class="report-header">
+
+                <div>
+                    <h3 class="fw-bold mb-1">
+                        Breast Cancer XAI System
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Explainable Deep Learning Analysis
+                    </p>
+                </div>
+
+                <div class="text-md-end mt-3 mt-md-0">
+                    <span class="report-status">
+                        <i class="bi bi-check-circle-fill"></i>
+                        Analysis Completed
+                    </span>
+                </div>
+
+            </div>
+
+
+            <hr class="my-4">
+
+
+            <!-- Patient/Image Information -->
+            <div class="section-title">
+                <i class="bi bi-image"></i>
+                Image Information
+            </div>
+
+            <div class="row g-4 mb-5">
+
+                <div class="col-md-5">
+
+                    {% if prediction and prediction.image_path %}
+
+                    <div class="report-image-wrapper">
+                        <img src="{{ url_for('static', path=prediction.image_path) }}"
+                             class="img-fluid report-image"
+                             alt="Histopathology Image">
+
+                    </div>
+
+                    {% elif image_path %}
+
+                    <div class="report-image-wrapper">
+                        <img src="{{ url_for('static', path=image_path) }}"
+                             class="img-fluid report-image"
+                             alt="Histopathology Image">
+                    </div>
+
+                    {% else %}
+
+                    <div class="image-placeholder">
+                        <i class="bi bi-image"></i>
+                        <p>No image preview available</p>
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="col-md-7">
+
+                    <div class="info-grid">
+
+                        <div class="info-box">
+                            <span class="info-label">Report ID</span>
+                            <strong>
+                                {{ prediction.id if prediction else prediction_id or 'N/A' }}
+                            </strong>
+                        </div>
+
+                        <div class="info-box">
+                            <span class="info-label">Date</span>
+                            <strong>
+                                {{ prediction.created_at if prediction else current_date or 'N/A' }}
+                            </strong>
+                        </div>
+
+                        <div class="info-box">
+                            <span class="info-label">Model</span>
+                            <strong>
+                                {{ prediction.model_name if prediction else model_name or 'ResNet50' }}
+                            </strong>
+                        </div>
+
+                        <div class="info-box">
+                            <span class="info-label">Input Type</span>
+                            <strong>
+                                Histopathology Image
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Prediction -->
+            <div class="section-title">
+                <i class="bi bi-cpu"></i>
+                Classification Result
+            </div>
+
+            <div class="prediction-result-box mb-5">
+
+                <div class="prediction-main">
+
+                    <div class="result-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+
+                    <div>
+
+                        <span class="result-label">
+                            Predicted Class
+                        </span>
+
+                        <h2 class="fw-bold mb-1">
+                            {{ prediction.prediction if prediction else prediction_class or 'Unknown' }}
+                        </h2>
+
+                        <p class="text-muted mb-0">
+                            Based on deep learning image classification
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="confidence-area">
+
+                    <div class="d-flex justify-content-between mb-2">
+
+                        <span class="fw-semibold">
+                            Confidence
+                        </span>
+
+                        <strong>
+                            {% if prediction and prediction.confidence %}
+                                {{ "%.2f"|format(prediction.confidence * 100) }}%
+                            {% elif confidence %}
+                                {{ "%.2f"|format(confidence * 100) }}%
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </strong>
+
+                    </div>
+
+                    <div class="progress confidence-progress">
+
+                        {% if prediction and prediction.confidence %}
+                            {% set confidence_value = prediction.confidence * 100 %}
+                        {% elif confidence %}
+                            {% set confidence_value = confidence * 100 %}
+                        {% else %}
+                            {% set confidence_value = 0 %}
+                        {% endif %}
+
+                        <div class="progress-bar"
+                             role="progressbar"
+                             style="width: {{ confidence_value }}%">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Model Information -->
+            <div class="section-title">
+                <i class="bi bi-diagram-3"></i>
+                Model Information
+            </div>
+
+            <div class="row g-3 mb-5">
+
+                <div class="col-md-4">
+                    <div class="model-info-card">
+                        <span>Architecture</span>
+                        <strong>
+                            {{ prediction.model_name if prediction else model_name or 'ResNet50' }}
+                        </strong>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="model-info-card">
+                        <span>Input Size</span>
+                        <strong>224 × 224</strong>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="model-info-card">
+                        <span>Explainability</span>
+                        <strong>Grad-CAM</strong>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Explainability -->
+            <div class="section-title">
+                <i class="bi bi-eye"></i>
+                Explainability Analysis
+            </div>
+
+            <div class="explanation-box mb-5">
+
+                <div class="explanation-icon">
+                    <i class="bi bi-lightbulb-fill"></i>
+                </div>
+
+                <div>
+
+                    <h5 class="fw-bold">
+                        Grad-CAM Visualization
+                    </h5>
+
+                    <p class="text-muted mb-3">
+                        Gradient-weighted Class Activation Mapping (Grad-CAM)
+                        can highlight image regions that contribute strongly
+                        to the model's prediction.
+                    </p>
+
+                    <a href="{{ url_for('gradcam',
+                              prediction_id=prediction.id if prediction else prediction_id) }}"
+                       class="btn btn-outline-primary">
+                        <i class="bi bi-fire"></i>
+                        View Grad-CAM
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- Disclaimer -->
+            <div class="alert alert-warning report-disclaimer">
+
+                <i class="bi bi-exclamation-triangle-fill"></i>
+
+                <div>
+                    <strong>Important:</strong>
+
+                    <p class="mb-0 mt-1">
+                        This report represents an AI-based research
+                        prediction from a histopathology image. It is not
+                        a substitute for professional medical diagnosis,
+                        clinical examination or pathological assessment.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- Footer -->
+            <div class="report-footer mt-5">
+
+                <div>
+                    <small class="text-muted">
+                        Generated by Breast Cancer XAI System
+                    </small>
+                </div>
+
+                <div>
+                    <small class="text-muted">
+                        Explainable Deep Learning Framework
+                    </small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Actions -->
+    <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+
+        <button type="button"
+                class="btn btn-primary px-4"
+                onclick="window.print()">
+
+            <i class="bi bi-printer"></i>
+            Print Report
+
+        </button>
+
+        <a href="{{ url_for('dashboard') }}"
+           class="btn btn-outline-secondary px-4">
+
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
+
+        </a>
+
+        <a href="{{ url_for('upload') }}"
+           class="btn btn-outline-primary px-4">
+
+            <i class="bi bi-cloud-upload"></i>
+            New Analysis
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+.report-card {
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.report-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    background: #e8f7ee;
+    color: #198754;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 22px;
+}
+
+.section-title i {
+    color: #0d6efd;
+}
+
+.report-image-wrapper {
+    background: #f8f9fa;
+    border-radius: 14px;
+    padding: 10px;
+    text-align: center;
+}
+
+.report-image {
+    width: 100%;
+    max-height: 330px;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.image-placeholder {
+    min-height: 280px;
+    border: 2px dashed #dee2e6;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #6c757d;
+}
+
+.image-placeholder i {
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.info-box {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.info-label {
+    display: block;
+    color: #6c757d;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.prediction-result-box {
+    background: #f8fbff;
+    border: 1px solid #dcecff;
+    border-radius: 16px;
+    padding: 28px;
+}
+
+.prediction-main {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.result-icon {
+    width: 62px;
+    height: 62px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+.result-label {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.confidence-progress {
+    height: 12px;
+    border-radius: 10px;
+}
+
+.model-info-card {
+    padding: 20px;
+    border-radius: 12px;
+    background: #f8f9fa;
+}
+
+.model-info-card span {
+    display: block;
+    color: #6c757d;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+.model-info-card strong {
+    font-size: 17px;
+}
+
+.explanation-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 24px;
+    border-radius: 15px;
+    background: #fff9e8;
+    border: 1px solid #ffe69c;
+}
+
+.explanation-icon {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #fff3cd;
+    color: #997404;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.report-disclaimer {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.report-disclaimer > i {
+    margin-top: 3px;
+}
+
+.report-footer {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .prediction-result-box {
+        padding: 20px;
+    }
+
+    .explanation-box {
+        flex-direction: column;
+    }
+
+}
+
+@media print {
+
+    body {
+        background: white !important;
+    }
+
+    .navbar,
+    footer,
+    .btn,
+    .report-status {
+        display: none !important;
+    }
+
+    .container {
+        max-width: 100% !important;
+    }
+
+    .report-card {
+        box-shadow: none !important;
+    }
+
+}
+
+</style>
+
+{% endblock %}

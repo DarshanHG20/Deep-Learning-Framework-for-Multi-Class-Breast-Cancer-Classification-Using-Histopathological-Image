@@ -1,0 +1,14 @@
+                     precision    recall  f1-score   support
+
+           adenosis       0.96      1.00      0.98       114
+   ductal_carcinoma       0.96      0.72      0.82       691
+       fibroadenoma       0.76      1.00      0.86        25
+  lobular_carcinoma       0.59      0.87      0.70       125
+ mucinous_carcinoma       0.76      0.72      0.74       158
+papillary_carcinoma       0.55      0.96      0.70       112
+    phyllodes_tumor       0.81      0.87      0.84        91
+    tubular_adenoma       0.82      0.91      0.86       114
+
+           accuracy                           0.80      1430
+          macro avg       0.77      0.88      0.81      1430
+       weighted avg       0.85      0.80      0.81      1430

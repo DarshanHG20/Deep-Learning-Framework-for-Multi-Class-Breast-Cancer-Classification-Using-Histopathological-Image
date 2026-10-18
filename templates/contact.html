@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Breast Cancer XAI{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Page Header -->
+    <div class="text-center mb-5">
+        <span class="badge bg-primary-subtle text-primary px-3 py-2 mb-3">
+            CONTACT & SUPPORT
+        </span>
+
+        <h1 class="fw-bold">
+            Get in Touch
+        </h1>
+
+        <p class="text-muted mx-auto" style="max-width: 700px;">
+            Have questions about the Breast Cancer XAI system?
+            Send us your message and our project team will review it.
+        </p>
+    </div>
+
+
+    <div class="row g-4">
+
+        <!-- Contact Information -->
+        <div class="col-lg-5">
+
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+
+                    <h3 class="fw-bold mb-4">
+                        Contact Information
+                    </h3>
+
+                    <div class="contact-item mb-4">
+                        <div class="contact-icon">
+                            <i class="bi bi-envelope-fill"></i>
+                        </div>
+
+                        <div>
+                            <h6 class="fw-bold mb-1">Email</h6>
+                            <p class="text-muted mb-0">
+                                support@breastcancerxai.com
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="contact-item mb-4">
+                        <div class="contact-icon">
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </div>
+
+                        <div>
+                            <h6 class="fw-bold mb-1">Institution</h6>
+                            <p class="text-muted mb-0">
+                                Presidency University<br>
+                                Bengaluru, Karnataka
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="contact-item mb-4">
+                        <div class="contact-icon">
+                            <i class="bi bi-cpu-fill"></i>
+                        </div>
+
+                        <div>
+                            <h6 class="fw-bold mb-1">Project</h6>
+                            <p class="text-muted mb-0">
+                                Explainable Deep Learning for
+                                Breast Cancer Classification
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="bi bi-clock-fill"></i>
+                        </div>
+
+                        <div>
+                            <h6 class="fw-bold mb-1">Support Hours</h6>
+                            <p class="text-muted mb-0">
+                                Monday - Friday<br>
+                                9:00 AM - 5:00 PM
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Contact Form -->
+        <div class="col-lg-7">
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+
+                    <h3 class="fw-bold mb-4">
+                        Send a Message
+                    </h3>
+
+                    <form method="POST"
+                          action="{{ url_for('contact') }}"
+                          id="contactForm">
+
+                        <div class="row g-3">
+
+                            <!-- Name -->
+                            <div class="col-md-6">
+                                <label for="name" class="form-label fw-semibold">
+                                    Full Name
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="name"
+                                       name="name"
+                                       placeholder="Enter your name"
+                                       required>
+                            </div>
+
+
+                            <!-- Email -->
+                            <div class="col-md-6">
+                                <label for="email" class="form-label fw-semibold">
+                                    Email Address
+                                </label>
+
+                                <input type="email"
+                                       class="form-control"
+                                       id="email"
+                                       name="email"
+                                       placeholder="Enter your email"
+                                       required>
+                            </div>
+
+
+                            <!-- Subject -->
+                            <div class="col-12">
+                                <label for="subject" class="form-label fw-semibold">
+                                    Subject
+                                </label>
+
+                                <select class="form-select"
+                                        id="subject"
+                                        name="subject"
+                                        required>
+
+                                    <option value="">
+                                        Select a subject
+                                    </option>
+
+                                    <option value="Technical Support">
+                                        Technical Support
+                                    </option>
+
+                                    <option value="Prediction Issue">
+                                        Prediction Issue
+                                    </option>
+
+                                    <option value="Grad-CAM">
+                                        Grad-CAM / Explainability
+                                    </option>
+
+                                    <option value="Model Information">
+                                        Model Information
+                                    </option>
+
+                                    <option value="General Question">
+                                        General Question
+                                    </option>
+
+                                </select>
+                            </div>
+
+
+                            <!-- Message -->
+                            <div class="col-12">
+                                <label for="message" class="form-label fw-semibold">
+                                    Message
+                                </label>
+
+                                <textarea class="form-control"
+                                          id="message"
+                                          name="message"
+                                          rows="6"
+                                          maxlength="1000"
+                                          placeholder="Write your message here..."
+                                          required></textarea>
+
+                                <div class="text-end mt-1">
+                                    <small class="text-muted">
+                                        <span id="charCount">0</span>/1000
+                                    </small>
+                                </div>
+                            </div>
+
+
+                            <!-- Submit -->
+                            <div class="col-12">
+
+                                <button type="submit"
+                                        class="btn btn-primary px-4 py-2"
+                                        id="submitBtn">
+
+                                    <i class="bi bi-send-fill me-2"></i>
+                                    Send Message
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Disclaimer -->
+    <div class="alert alert-warning border-0 shadow-sm mt-4">
+
+        <div class="d-flex align-items-start">
+
+            <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+
+            <div>
+                <h6 class="fw-bold">
+                    Important Notice
+                </h6>
+
+                <p class="mb-0 small">
+                    This project is developed for academic and research
+                    purposes. Predictions generated by the system should
+                    not be considered a medical diagnosis. Always consult
+                    a qualified medical professional for clinical decisions.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    .contact-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .contact-icon {
+        width: 45px;
+        height: 45px;
+        min-width: 45px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 12px;
+
+        background: rgba(13, 110, 253, 0.10);
+        color: #0d6efd;
+
+        font-size: 20px;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 10px;
+        padding: 11px 14px;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.12);
+    }
+
+    textarea.form-control {
+        resize: vertical;
+    }
+
+    .card {
+        border-radius: 16px;
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const message = document.getElementById("message");
+        const charCount = document.getElementById("charCount");
+        const form = document.getElementById("contactForm");
+        const submitBtn = document.getElementById("submitBtn");
+
+
+        // Character counter
+        if (message && charCount) {
+
+            message.addEventListener("input", function () {
+
+                charCount.textContent = message.value.length;
+
+            });
+
+        }
+
+
+        // Form submit protection
+        if (form) {
+
+            form.addEventListener("submit", function () {
+
+                submitBtn.disabled = true;
+
+                submitBtn.innerHTML =
+                    '<span class="spinner-border spinner-border-sm me-2"></span>' +
+                    'Sending...';
+
+            });
+
+        }
+
+    });
+
+</script>
+
+{% endblock %}

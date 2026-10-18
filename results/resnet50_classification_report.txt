@@ -1,0 +1,17 @@
+RESNET50 CLASSIFICATION REPORT
+===============================
+
+                     precision    recall  f1-score   support
+
+           adenosis       0.00      0.00      0.00         0
+   ductal_carcinoma       0.00      0.00      0.00         0
+       fibroadenoma       0.00      0.00      0.00         0
+  lobular_carcinoma       0.00      0.00      0.00         0
+ mucinous_carcinoma       0.00      0.00      0.00         0
+papillary_carcinoma       0.94      0.62      0.75       407
+    phyllodes_tumor       0.95      0.83      0.89       453
+    tubular_adenoma       0.97      0.88      0.92       569
+
+           accuracy                           0.79      1429
+          macro avg       0.36      0.29      0.32      1429
+       weighted avg       0.95      0.79      0.86      1429

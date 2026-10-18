@@ -1,0 +1,8 @@
+RESNET50 EVALUATION RESULTS
+============================
+
+Accuracy  : 0.7894 (78.94%)
+Precision : 0.9544 (95.44%)
+Recall    : 0.7894 (78.94%)
+F1 Score  : 0.8605 (86.05%)
+Macro AUC : 0.9784

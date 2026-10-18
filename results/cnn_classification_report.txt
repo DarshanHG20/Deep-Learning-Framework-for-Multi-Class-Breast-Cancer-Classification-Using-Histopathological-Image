@@ -1,0 +1,25 @@
+CNN EVALUATION RESULTS
+======================
+
+Accuracy  : 0.8943
+Precision : 0.9562
+Recall    : 0.8943
+F1 Score  : 0.9238
+
+CLASSIFICATION REPORT
+=====================
+
+                     precision    recall  f1-score   support
+
+           adenosis       0.00      0.00      0.00         0
+   ductal_carcinoma       0.00      0.00      0.00         0
+       fibroadenoma       0.00      0.00      0.00         0
+  lobular_carcinoma       0.00      0.00      0.00         0
+ mucinous_carcinoma       0.00      0.00      0.00         0
+papillary_carcinoma       0.94      0.92      0.93       407
+    phyllodes_tumor       0.97      0.85      0.90       453
+    tubular_adenoma       0.96      0.91      0.93       569
+
+           accuracy                           0.89      1429
+          macro avg       0.36      0.34      0.35      1429
+       weighted avg       0.96      0.89      0.92      1429

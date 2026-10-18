@@ -1,0 +1,844 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard | Breast Cancer XAI
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link rel="stylesheet"
+    href="{{ url_for('static', path='css/style.css') }}"
+
+{% endblock %}
+
+
+{% block content %}
+
+<!-- =========================================================
+     DASHBOARD HEADER
+     ========================================================= -->
+
+<section class="dashboard-header">
+
+    <div class="container">
+
+        <div class="d-flex justify-content-between
+                    align-items-center flex-wrap gap-3">
+
+            <div>
+
+                <span class="text-primary fw-semibold">
+                    BREAST CANCER XAI
+                </span>
+
+                <h1 class="fw-bold mt-2 mb-1">
+                    Dashboard
+                </h1>
+
+                <p class="text-muted mb-0">
+
+                    Welcome back,
+
+                    <strong>
+                        {{ session.get('user_name', 'User') }}
+                    </strong>
+
+                </p>
+
+            </div>
+
+
+            <a href="{{ url_for('upload') }}"
+               class="btn btn-primary btn-lg">
+
+                <i class="fa-solid fa-microscope me-2"></i>
+
+                Analyze New Image
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     STATISTICS
+     ========================================================= -->
+
+<section class="py-4">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+
+            <!-- TOTAL PREDICTIONS -->
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="stat-card h-100">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+                                Total Predictions
+                            </p>
+
+                            <h2 class="fw-bold mb-0"
+                                data-count="{{ total_predictions|default(0) }}">
+
+                                {{ total_predictions|default(0) }}
+
+                            </h2>
+
+                        </div>
+
+                        <div class="stat-icon">
+
+                            <i class="fa-solid fa-chart-line"></i>
+
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        All analyzed images
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- BENIGN -->
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="stat-card h-100">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+                                Benign
+                            </p>
+
+                            <h2 class="fw-bold mb-0"
+                                data-count="{{ benign_count|default(0) }}">
+
+                                {{ benign_count|default(0) }}
+
+                            </h2>
+
+                        </div>
+
+                        <div class="stat-icon">
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        Non-malignant predictions
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MALIGNANT -->
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="stat-card h-100">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+                                Malignant
+                            </p>
+
+                            <h2 class="fw-bold mb-0"
+                                data-count="{{ malignant_count|default(0) }}">
+
+                                {{ malignant_count|default(0) }}
+
+                            </h2>
+
+                        </div>
+
+                        <div class="stat-icon">
+
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        Malignant predictions
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ACTIVE MODEL -->
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="stat-card h-100">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+                                Active Model
+                            </p>
+
+                            <h5 class="fw-bold mb-1">
+
+                                {{ active_model|default('ResNet50') }}
+
+                            </h5>
+
+                        </div>
+
+                        <div class="stat-icon">
+
+                            <i class="fa-solid fa-brain"></i>
+
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        Deep learning classifier
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     MAIN DASHBOARD
+     ========================================================= -->
+
+<section class="py-4 bg-light">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+
+            <!-- =================================================
+                 QUICK ACTIONS
+                 ================================================= -->
+
+            <div class="col-lg-4">
+
+                <div class="dashboard-card h-100">
+
+                    <div class="card-header-custom">
+
+                        <div>
+
+                            <h5 class="fw-bold mb-1">
+                                Quick Actions
+                            </h5>
+
+                            <p class="text-muted small mb-0">
+                                Access system features
+                            </p>
+
+                        </div>
+
+                        <i class="fa-solid fa-bolt text-primary"></i>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+
+                        <!-- UPLOAD -->
+
+                        <a href="{{ url_for('upload') }}"
+                           class="quick-action">
+
+                            <div class="quick-action-icon">
+
+                                <i class="fa-solid fa-upload"></i>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Upload Image
+                                </strong>
+
+                                <small>
+                                    Start a new analysis
+                                </small>
+
+                            </div>
+
+                            <i class="fa-solid fa-chevron-right ms-auto"></i>
+
+                        </a>
+
+
+
+                        <!-- HISTORY -->
+
+                        <a href="{{ url_for('history') }}"
+                           class="quick-action">
+
+                            <div class="quick-action-icon">
+
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Prediction History
+                                </strong>
+
+                                <small>
+                                    View previous analyses
+                                </small>
+
+                            </div>
+
+                            <i class="fa-solid fa-chevron-right ms-auto"></i>
+
+                        </a>
+
+
+
+                        <!-- MODEL COMPARISON -->
+
+                        <a href="{{ url_for('model_comparison') }}"
+                           class="quick-action">
+
+                            <div class="quick-action-icon">
+
+                                <i class="fa-solid fa-chart-column"></i>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Model Comparison
+                                </strong>
+
+                                <small>
+                                    Compare model performance
+                                </small>
+
+                            </div>
+
+                            <i class="fa-solid fa-chevron-right ms-auto"></i>
+
+                        </a>
+
+
+
+                        <!-- ABOUT -->
+
+                        <a href="{{ url_for('about') }}"
+                           class="quick-action">
+
+                            <div class="quick-action-icon">
+
+                                <i class="fa-solid fa-circle-info"></i>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    About Project
+                                </strong>
+
+                                <small>
+                                    Learn about the framework
+                                </small>
+
+                            </div>
+
+                            <i class="fa-solid fa-chevron-right ms-auto"></i>
+
+                        </a>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 RECENT PREDICTIONS
+                 ================================================= -->
+
+            <div class="col-lg-8">
+
+                <div class="dashboard-card h-100">
+
+
+                    <div class="card-header-custom">
+
+                        <div>
+
+                            <h5 class="fw-bold mb-1">
+                                Recent Predictions
+                            </h5>
+
+                            <p class="text-muted small mb-0">
+                                Latest image analysis results
+                            </p>
+
+                        </div>
+
+
+                        <a href="{{ url_for('history') }}"
+                           class="btn btn-sm btn-outline-primary">
+
+                            View All
+
+                        </a>
+
+                    </div>
+
+
+
+                    {% if recent_predictions %}
+
+                    <div class="table-responsive">
+
+                        <table class="table align-middle mb-0">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Image
+                                    </th>
+
+                                    <th>
+                                        Prediction
+                                    </th>
+
+                                    <th>
+                                        Confidence
+                                    </th>
+
+                                    <th>
+                                        Model
+                                    </th>
+
+                                    <th>
+                                        Date
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for prediction in recent_predictions %}
+
+                                <tr>
+
+
+                                    <!-- IMAGE -->
+
+                                    <td>
+
+                                        <div class="d-flex align-items-center">
+
+                                            {% if prediction.image_path %}
+
+                                            <img
+                                                src="{{ url_for(
+                                                    'static',
+                                                    path=prediction.image_path
+                                                ) }}"
+                                                class="history-image"
+                                                alt="Histopathology Image"
+                                                loading="lazy"
+                                            >
+
+                                            {% else %}
+
+                                            <div class="history-placeholder">
+
+                                                <i class="fa-solid fa-image"></i>
+
+                                            </div>
+
+                                            {% endif %}
+
+
+                                            <span class="ms-2 text-truncate"
+                                                  style="max-width: 160px;">
+
+                                                {{ prediction.filename|default('Image') }}
+
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+
+
+                                    <!-- PREDICTION -->
+
+                                    <td>
+
+                                        {% if prediction.prediction
+                                              and prediction.prediction|lower
+                                              == 'malignant' %}
+
+                                        <span class="badge bg-danger">
+
+                                            <i class="fa-solid fa-triangle-exclamation me-1"></i>
+
+                                            Malignant
+
+                                        </span>
+
+                                        {% else %}
+
+                                        <span class="badge bg-success">
+
+                                            <i class="fa-solid fa-circle-check me-1"></i>
+
+                                            Benign
+
+                                        </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+
+                                    <!-- CONFIDENCE -->
+
+                                    <td>
+
+                                        <strong>
+
+                                            {{ prediction.confidence|default(0) }}%
+
+                                        </strong>
+
+                                    </td>
+
+
+
+                                    <!-- MODEL -->
+
+                                    <td>
+
+                                        {{ prediction.model_name|default('ResNet50') }}
+
+                                    </td>
+
+
+
+                                    <!-- DATE -->
+
+                                    <td>
+
+                                        <span class="text-muted">
+
+                                            {{ prediction.created_at|default('—') }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    {% else %}
+
+
+                    <!-- EMPTY STATE -->
+
+                    <div class="empty-state">
+
+                        <div class="empty-icon">
+
+                            <i class="fa-solid fa-folder-open"></i>
+
+                        </div>
+
+
+                        <h5 class="fw-bold mt-3">
+                            No Predictions Yet
+                        </h5>
+
+
+                        <p class="text-muted">
+
+                            Upload a histopathology image to
+                            start your first analysis.
+
+                        </p>
+
+
+                        <a href="{{ url_for('upload') }}"
+                           class="btn btn-primary">
+
+                            <i class="fa-solid fa-upload me-2"></i>
+
+                            Upload Image
+
+                        </a>
+
+                    </div>
+
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     ANALYSIS WORKFLOW
+     ========================================================= -->
+
+<section class="py-5">
+
+    <div class="container">
+
+
+        <div class="text-center mb-4">
+
+            <span class="text-primary fw-semibold">
+                ANALYSIS WORKFLOW
+            </span>
+
+            <h3 class="fw-bold mt-2">
+                From Image to Explainable Prediction
+            </h3>
+
+            <p class="text-muted">
+                A complete deep-learning based analysis pipeline
+            </p>
+
+        </div>
+
+
+
+        <div class="row g-4 text-center">
+
+
+            <!-- STEP 1 -->
+
+            <div class="col-md-3">
+
+                <div class="workflow-card">
+
+                    <div class="workflow-icon">
+
+                        <i class="fa-solid fa-image"></i>
+
+                    </div>
+
+                    <span class="workflow-step">
+                        STEP 01
+                    </span>
+
+                    <h6 class="fw-bold mt-2">
+                        Image Upload
+                    </h6>
+
+                    <p class="small text-muted">
+
+                        Histopathological image is uploaded
+                        for analysis.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- STEP 2 -->
+
+            <div class="col-md-3">
+
+                <div class="workflow-card">
+
+                    <div class="workflow-icon">
+
+                        <i class="fa-solid fa-sliders"></i>
+
+                    </div>
+
+                    <span class="workflow-step">
+                        STEP 02
+                    </span>
+
+                    <h6 class="fw-bold mt-2">
+                        Preprocessing
+                    </h6>
+
+                    <p class="small text-muted">
+
+                        Image is resized and normalized
+                        before model inference.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- STEP 3 -->
+
+            <div class="col-md-3">
+
+                <div class="workflow-card">
+
+                    <div class="workflow-icon">
+
+                        <i class="fa-solid fa-brain"></i>
+
+                    </div>
+
+                    <span class="workflow-step">
+                        STEP 03
+                    </span>
+
+                    <h6 class="fw-bold mt-2">
+                        Classification
+                    </h6>
+
+                    <p class="small text-muted">
+
+                        Deep learning model generates
+                        the predicted class.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- STEP 4 -->
+
+            <div class="col-md-3">
+
+                <div class="workflow-card">
+
+                    <div class="workflow-icon">
+
+                        <i class="fa-solid fa-fire"></i>
+
+                    </div>
+
+                    <span class="workflow-step">
+                        STEP 04
+                    </span>
+
+                    <h6 class="fw-bold mt-2">
+                        Explainability
+                    </h6>
+
+                    <p class="small text-muted">
+
+                        Grad-CAM highlights important
+                        regions of the image.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script src="{{ url_for(
+    'static',
+    path='js/dashboard.js'
+) }}"></script>
+
+{% endblock %}

@@ -1,0 +1,818 @@
+{% extends "base.html" %}
+
+{% block title %}
+Grad-CAM Explanation | Breast Cancer XAI
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet"
+      href="{{ url_for('static', path='css/dashboard.css') }}">
+
+<style>
+    .xai-image-card {
+        height: 100%;
+        border: 1px solid #e5e7eb;
+        border-radius: 15px;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .xai-title {
+        padding: 15px 18px;
+        font-weight: 600;
+        border-bottom: 1px solid #e5e7eb;
+        background: #f8f9fa;
+    }
+
+    .xai-image-wrapper {
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+        background: #f8f9fa;
+    }
+
+    .xai-image {
+        width: 100%;
+        max-height: 450px;
+        object-fit: contain;
+        border-radius: 10px;
+    }
+
+    .xai-placeholder {
+        min-height: 280px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #6c757d;
+    }
+
+    .xai-placeholder i {
+        font-size: 45px;
+        margin-bottom: 15px;
+    }
+
+    .result-summary {
+        border-radius: 12px;
+        padding: 20px;
+        background: #f8f9fa;
+        height: 100%;
+    }
+
+    .result-label {
+        font-size: 13px;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+    }
+
+    .workflow-card {
+        height: 100%;
+        padding: 25px 15px;
+        border-radius: 15px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+    }
+
+    .workflow-icon {
+        width: 55px;
+        height: 55px;
+        margin: auto;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f1f5ff;
+        color: #0d6efd;
+        font-size: 22px;
+    }
+
+    .workflow-step {
+        display: inline-block;
+        margin-top: 15px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #0d6efd;
+    }
+
+    .heatmap-legend {
+        display: flex;
+        justify-content: center;
+        gap: 35px;
+        flex-wrap: wrap;
+    }
+
+    .legend-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+    }
+
+    .legend-color {
+        width: 22px;
+        height: 22px;
+        border-radius: 5px;
+        display: inline-block;
+    }
+
+    .legend-color.low {
+        background: #273c75;
+    }
+
+    .legend-color.medium {
+        background: #f6b93b;
+    }
+
+    .legend-color.high {
+        background: #e74c3c;
+    }
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<section class="page-header">
+
+    <div class="container text-center">
+
+        <span class="badge bg-light text-primary mb-3">
+
+            <i class="fa-solid fa-fire me-2"></i>
+
+            Explainable AI
+
+        </span>
+
+        <h1>
+            Grad-CAM Explanation
+        </h1>
+
+        <p class="mb-0">
+            Visual explanation of the regions influencing
+            the model prediction
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CONTENT
+===================================================== -->
+
+<section class="py-5 bg-light">
+
+    <div class="container">
+
+
+        <!-- =================================================
+             RESULT SUMMARY
+        ================================================== -->
+
+        <div class="dashboard-card mb-4">
+
+            <div class="p-4">
+
+                <div class="row g-4">
+
+
+                    <!-- PREDICTION -->
+
+                    <div class="col-md-4">
+
+                        <div class="result-summary">
+
+                            <span class="result-label">
+                                Prediction
+                            </span>
+
+                            <h3 class="fw-bold mt-2">
+
+                                {{ predicted_class
+                                   |default('Unknown')
+                                   |replace('_', ' ')
+                                   |title }}
+
+                            </h3>
+
+
+                            {% set malignant_classes = [
+                                'ductal_carcinoma',
+                                'lobular_carcinoma',
+                                'mucinous_carcinoma',
+                                'papillary_carcinoma'
+                            ] %}
+
+
+                            {% set benign_classes = [
+                                'adenosis',
+                                'fibroadenoma',
+                                'phyllodes_tumor',
+                                'tubular_adenoma'
+                            ] %}
+
+
+                            {% if predicted_class in malignant_classes %}
+
+                                <span class="badge bg-danger">
+
+                                    <i class="fa-solid
+                                              fa-triangle-exclamation me-1"></i>
+
+                                    Malignant
+
+                                </span>
+
+                            {% elif predicted_class in benign_classes %}
+
+                                <span class="badge bg-success">
+
+                                    <i class="fa-solid
+                                              fa-circle-check me-1"></i>
+
+                                    Benign
+
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONFIDENCE -->
+
+                    <div class="col-md-4">
+
+                        <div class="result-summary">
+
+                            <span class="result-label">
+                                Confidence
+                            </span>
+
+                            <h3 class="fw-bold mt-2">
+
+                                {{ "%.2f"|format(
+                                    confidence|default(0)|float
+                                ) }}%
+
+                            </h3>
+
+
+                            <div class="progress mt-3"
+                                 style="height: 9px;">
+
+                                <div
+                                    class="progress-bar"
+                                    role="progressbar"
+                                    style="
+                                        width: {{ confidence|default(0)|float }}%;
+                                    "
+                                    aria-valuenow="{{ confidence|default(0)|float }}"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MODEL -->
+
+                    <div class="col-md-4">
+
+                        <div class="result-summary">
+
+                            <span class="result-label">
+                                Model
+                            </span>
+
+                            <h3 class="fw-bold mt-2">
+
+                                {{ model_name|default('ResNet50') }}
+
+                            </h3>
+
+                            <small class="text-muted">
+
+                                Explainable deep learning model
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             IMAGE COMPARISON
+        ================================================== -->
+
+        <div class="dashboard-card">
+
+            <div class="card-header-custom">
+
+                <div>
+
+                    <h5 class="fw-bold mb-1">
+                        Visual Explanation
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+                        Original image, heatmap and Grad-CAM overlay
+                    </p>
+
+                </div>
+
+                <i class="fa-solid fa-fire text-danger fs-3"></i>
+
+            </div>
+
+
+            <div class="p-4">
+
+                <div class="row g-4">
+
+
+                    <!-- =================================================
+                         ORIGINAL
+                    ================================================== -->
+
+                    <div class="col-lg-4">
+
+                        <div class="xai-image-card">
+
+                            <div class="xai-title">
+
+                                <i class="fa-solid fa-image me-2"></i>
+
+                                Original Image
+
+                            </div>
+
+
+                            <div class="xai-image-wrapper">
+
+                                {% if original_image %}
+
+                                    <img
+                                        src="{{ original_image }}"
+                                        class="xai-image"
+                                        alt="Original histopathology image"
+                                        loading="lazy">
+
+                                {% else %}
+
+                                    <div class="xai-placeholder">
+
+                                        <i class="fa-solid fa-image"></i>
+
+                                        <p class="mb-0">
+                                            Original image unavailable
+                                        </p>
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         HEATMAP
+                    ================================================== -->
+
+                    <div class="col-lg-4">
+
+                        <div class="xai-image-card">
+
+                            <div class="xai-title">
+
+                                <i class="fa-solid fa-fire me-2"></i>
+
+                                Grad-CAM Heatmap
+
+                            </div>
+
+
+                            <div class="xai-image-wrapper">
+
+                                {% if heatmap_image %}
+
+                                    <img
+                                        src="{{ heatmap_image }}"
+                                        class="xai-image"
+                                        alt="Grad-CAM heatmap"
+                                        loading="lazy">
+
+                                {% else %}
+
+                                    <div class="xai-placeholder">
+
+                                        <i class="fa-solid fa-fire"></i>
+
+                                        <p class="mb-0">
+                                            Heatmap unavailable
+                                        </p>
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         OVERLAY
+                    ================================================== -->
+
+                    <div class="col-lg-4">
+
+                        <div class="xai-image-card">
+
+                            <div class="xai-title">
+
+                                <i class="fa-solid fa-layer-group me-2"></i>
+
+                                Grad-CAM Overlay
+
+                            </div>
+
+
+                            <div class="xai-image-wrapper">
+
+                                {% if overlay_image %}
+
+                                    <img
+                                        src="{{ overlay_image }}"
+                                        class="xai-image"
+                                        alt="Grad-CAM overlay"
+                                        loading="lazy">
+
+                                {% else %}
+
+                                    <div class="xai-placeholder">
+
+                                        <i class="fa-solid
+                                                  fa-layer-group"></i>
+
+                                        <p class="mb-0">
+                                            Overlay unavailable
+                                        </p>
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             HEATMAP INTERPRETATION
+        ================================================== -->
+
+        <div class="dashboard-card mt-4">
+
+            <div class="card-header-custom">
+
+                <div>
+
+                    <h5 class="fw-bold mb-1">
+                        Heatmap Interpretation
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+                        Understanding the highlighted regions
+                    </p>
+
+                </div>
+
+                <i class="fa-solid fa-palette
+                          text-primary fs-3"></i>
+
+            </div>
+
+
+            <div class="p-4">
+
+                <div class="heatmap-legend">
+
+                    <div class="legend-label">
+
+                        <span class="legend-color low"></span>
+
+                        Low Importance
+
+                    </div>
+
+
+                    <div class="legend-label">
+
+                        <span class="legend-color medium"></span>
+
+                        Medium Importance
+
+                    </div>
+
+
+                    <div class="legend-label">
+
+                        <span class="legend-color high"></span>
+
+                        High Importance
+
+                    </div>
+
+                </div>
+
+
+                <p class="text-muted small text-center mt-3 mb-0">
+
+                    Warmer regions indicate areas that contributed
+                    more strongly to the model's classification.
+                    Grad-CAM is an explanation technique and does
+                    not by itself establish a medical diagnosis.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             HOW GRAD-CAM WORKS
+        ================================================== -->
+
+        <div class="dashboard-card mt-4">
+
+            <div class="card-header-custom">
+
+                <div>
+
+                    <h5 class="fw-bold mb-1">
+                        How Grad-CAM Works
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+                        Explainable deep learning workflow
+                    </p>
+
+                </div>
+
+                <i class="fa-solid fa-brain
+                          text-primary fs-3"></i>
+
+            </div>
+
+
+            <div class="p-4">
+
+                <div class="row g-4">
+
+
+                    <!-- STEP 1 -->
+
+                    <div class="col-md-3">
+
+                        <div class="workflow-card text-center">
+
+                            <div class="workflow-icon">
+
+                                <i class="fa-solid fa-image"></i>
+
+                            </div>
+
+                            <span class="workflow-step">
+                                STEP 01
+                            </span>
+
+                            <h6 class="fw-bold mt-2">
+                                Input
+                            </h6>
+
+                            <p class="small text-muted mb-0">
+
+                                Histopathology image is supplied
+                                to the trained model.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STEP 2 -->
+
+                    <div class="col-md-3">
+
+                        <div class="workflow-card text-center">
+
+                            <div class="workflow-icon">
+
+                                <i class="fa-solid fa-network-wired"></i>
+
+                            </div>
+
+                            <span class="workflow-step">
+                                STEP 02
+                            </span>
+
+                            <h6 class="fw-bold mt-2">
+                                Feature Extraction
+                            </h6>
+
+                            <p class="small text-muted mb-0">
+
+                                The neural network extracts
+                                important visual features.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STEP 3 -->
+
+                    <div class="col-md-3">
+
+                        <div class="workflow-card text-center">
+
+                            <div class="workflow-icon">
+
+                                <i class="fa-solid fa-calculator"></i>
+
+                            </div>
+
+                            <span class="workflow-step">
+                                STEP 03
+                            </span>
+
+                            <h6 class="fw-bold mt-2">
+                                Activation Analysis
+                            </h6>
+
+                            <p class="small text-muted mb-0">
+
+                                Gradient information determines
+                                influential image regions.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STEP 4 -->
+
+                    <div class="col-md-3">
+
+                        <div class="workflow-card text-center">
+
+                            <div class="workflow-icon">
+
+                                <i class="fa-solid fa-fire"></i>
+
+                            </div>
+
+                            <span class="workflow-step">
+                                STEP 04
+                            </span>
+
+                            <h6 class="fw-bold mt-2">
+                                Heatmap
+                            </h6>
+
+                            <p class="small text-muted mb-0">
+
+                                Important regions are visualized
+                                as a heatmap.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACTION BUTTONS
+        ================================================== -->
+
+        <div class="text-center mt-4">
+
+
+            {% if prediction_id %}
+
+                <a
+                    href="{{ url_for(
+                        'result',
+                        prediction_id=prediction_id
+                    ) }}"
+                    class="btn btn-outline-primary me-2 mb-2">
+
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+
+                    Back to Result
+
+                </a>
+
+            {% endif %}
+
+
+            <a
+                href="{{ url_for('history') }}"
+                class="btn btn-outline-dark me-2 mb-2">
+
+                <i class="fa-solid fa-clock-rotate-left me-2"></i>
+
+                Prediction History
+
+            </a>
+
+
+            <a
+                href="{{ url_for('upload') }}"
+                class="btn btn-primary mb-2">
+
+                <i class="fa-solid fa-upload me-2"></i>
+
+                Analyze Another Image
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             DISCLAIMER
+        ================================================== -->
+
+        <div class="alert alert-warning mt-4 small">
+
+            <i class="fa-solid fa-circle-info me-2"></i>
+
+            <strong>Academic Use:</strong>
+            This system is developed for academic and research
+            purposes. Grad-CAM visualizations explain model
+            behavior and should not be treated as a medical diagnosis.
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

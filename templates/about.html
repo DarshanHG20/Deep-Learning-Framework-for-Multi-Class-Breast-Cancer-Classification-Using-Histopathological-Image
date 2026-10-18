@@ -1,0 +1,683 @@
+{% extends "base.html" %}
+
+{% block title %}About Project - Breast Cancer XAI{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Hero -->
+    <section class="about-hero text-center mb-5">
+
+        <span class="badge bg-primary px-3 py-2 mb-3">
+            <i class="bi bi-heart-pulse"></i>
+            Breast Cancer XAI
+        </span>
+
+        <h1 class="fw-bold">
+            Explainable Deep Learning for
+            Breast Cancer Classification
+        </h1>
+
+        <p class="lead text-muted mx-auto mt-3"
+           style="max-width: 850px;">
+
+            An AI-based research system for classifying breast cancer
+            histopathology images and providing visual explanations
+            for model predictions using Grad-CAM.
+
+        </p>
+
+    </section>
+
+
+    <!-- Project Overview -->
+    <div class="row g-4 mb-5">
+
+        <div class="col-lg-7">
+
+            <div class="card about-card border-0 shadow-sm h-100">
+
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="about-icon">
+                        <i class="bi bi-book-half"></i>
+                    </div>
+
+                    <h3 class="fw-bold mt-3">
+                        Project Overview
+                    </h3>
+
+                    <p class="text-muted">
+                        Histopathological image analysis is an important
+                        component of breast cancer diagnosis and research.
+                        However, manual analysis of microscopic images can
+                        be time-consuming and requires considerable
+                        expertise.
+                    </p>
+
+                    <p class="text-muted">
+                        This project develops a deep learning framework
+                        that can analyze breast cancer histopathology
+                        images and classify them using convolutional
+                        neural network architectures.
+                    </p>
+
+                    <p class="text-muted mb-0">
+                        The system also incorporates Explainable AI
+                        techniques so that important image regions
+                        contributing to a prediction can be visualized.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-5">
+
+            <div class="card about-card border-0 shadow-sm h-100">
+
+                <div class="card-body p-4 p-md-5">
+
+                    <h4 class="fw-bold mb-4">
+                        <i class="bi bi-bullseye text-primary"></i>
+                        Project Objectives
+                    </h4>
+
+                    <div class="objective-item">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>
+                            Classify histopathology images using
+                            deep learning.
+                        </span>
+                    </div>
+
+                    <div class="objective-item">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>
+                            Compare multiple CNN-based architectures.
+                        </span>
+                    </div>
+
+                    <div class="objective-item">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>
+                            Provide prediction confidence.
+                        </span>
+                    </div>
+
+                    <div class="objective-item">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>
+                            Generate Grad-CAM explanations.
+                        </span>
+                    </div>
+
+                    <div class="objective-item">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>
+                            Maintain prediction history.
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Workflow -->
+    <div class="card border-0 shadow-sm mb-5">
+
+        <div class="card-body p-4 p-md-5">
+
+            <div class="text-center mb-5">
+
+                <h3 class="fw-bold">
+                    System Workflow
+                </h3>
+
+                <p class="text-muted">
+                    From histopathology image to explainable prediction
+                </p>
+
+            </div>
+
+
+            <div class="about-workflow">
+
+                <div class="workflow-step">
+
+                    <div class="workflow-number">01</div>
+
+                    <i class="bi bi-cloud-upload workflow-icon"></i>
+
+                    <h5>Upload</h5>
+
+                    <p>
+                        Upload a histopathology image
+                        through the web interface.
+                    </p>
+
+                </div>
+
+
+                <div class="workflow-line"></div>
+
+
+                <div class="workflow-step">
+
+                    <div class="workflow-number">02</div>
+
+                    <i class="bi bi-sliders workflow-icon"></i>
+
+                    <h5>Preprocess</h5>
+
+                    <p>
+                        Resize and normalize the
+                        input image before prediction.
+                    </p>
+
+                </div>
+
+
+                <div class="workflow-line"></div>
+
+
+                <div class="workflow-step">
+
+                    <div class="workflow-number">03</div>
+
+                    <i class="bi bi-cpu workflow-icon"></i>
+
+                    <h5>Classify</h5>
+
+                    <p>
+                        The selected deep learning model
+                        generates the prediction.
+                    </p>
+
+                </div>
+
+
+                <div class="workflow-line"></div>
+
+
+                <div class="workflow-step">
+
+                    <div class="workflow-number">04</div>
+
+                    <i class="bi bi-fire workflow-icon"></i>
+
+                    <h5>Explain</h5>
+
+                    <p>
+                        Grad-CAM highlights important
+                        regions used by the model.
+                    </p>
+
+                </div>
+
+
+                <div class="workflow-line"></div>
+
+
+                <div class="workflow-step">
+
+                    <div class="workflow-number">05</div>
+
+                    <i class="bi bi-file-earmark-text workflow-icon"></i>
+
+                    <h5>Report</h5>
+
+                    <p>
+                        Prediction details are presented
+                        in an analysis report.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Technologies -->
+    <section class="mb-5">
+
+        <div class="text-center mb-4">
+
+            <h3 class="fw-bold">
+                Technologies Used
+            </h3>
+
+            <p class="text-muted">
+                Technologies and frameworks used to build the system
+            </p>
+
+        </div>
+
+
+        <div class="row g-3">
+
+            <div class="col-lg-3 col-md-4 col-6">
+                <div class="technology-card">
+                    <i class="bi bi-filetype-py"></i>
+                    <strong>Python</strong>
+                    <span>Programming</span>
+                </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-6">
+                <div class="technology-card">
+                    <i class="bi bi-braces"></i>
+                    <strong>TensorFlow</strong>
+                    <span>Deep Learning</span>
+                </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-6">
+                <div class="technology-card">
+                    <i class="bi bi-window"></i>
+                    <strong>Flask</strong>
+                    <span>Web Framework</span>
+                </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-6">
+                <div class="technology-card">
+                    <i class="bi bi-database"></i>
+                    <strong>MySQL</strong>
+                    <span>Database</span>
+                </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-6">
+                <div class="technology-card">
+                    <i class="bi bi-image"></i>
+                    <strong>OpenCV</strong>
+                    <span>Image Processing</span>
+                </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-6">
+                <div class="technology-card">
+                    <i class="bi bi-graph-up"></i>
+                    <strong>Scikit-learn</strong>
+                    <span>Evaluation</span>
+                </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-6">
+                <div class="technology-card">
+                    <i class="bi bi-diagram-3"></i>
+                    <strong>ResNet50</strong>
+                    <span>Deep CNN</span>
+                </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-6">
+                <div class="technology-card">
+                    <i class="bi bi-eye"></i>
+                    <strong>Grad-CAM</strong>
+                    <span>Explainable AI</span>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- XAI -->
+    <div class="xai-section mb-5">
+
+        <div class="row align-items-center g-4">
+
+            <div class="col-lg-7">
+
+                <span class="xai-label">
+                    EXPLAINABLE AI
+                </span>
+
+                <h2 class="fw-bold mt-2">
+                    Making AI Predictions More Understandable
+                </h2>
+
+                <p>
+                    Deep learning models can achieve strong classification
+                    performance, but understanding why a model produced a
+                    particular prediction is equally important.
+                </p>
+
+                <p class="mb-0">
+                    Our system uses Grad-CAM to generate visual
+                    explanations that indicate image regions contributing
+                    to the model's prediction.
+                </p>
+
+            </div>
+
+
+            <div class="col-lg-5">
+
+                <div class="xai-visual">
+
+                    <div class="xai-circle">
+                        <i class="bi bi-eye"></i>
+                    </div>
+
+                    <div class="xai-arrow">
+                        <i class="bi bi-arrow-right"></i>
+                    </div>
+
+                    <div class="xai-circle">
+                        <i class="bi bi-lightbulb"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Disclaimer -->
+    <div class="alert alert-warning about-disclaimer">
+
+        <i class="bi bi-exclamation-triangle-fill"></i>
+
+        <div>
+
+            <strong>Research Project Disclaimer</strong>
+
+            <p class="mb-0 mt-1">
+                This system is developed for academic and research
+                purposes. Its predictions should not be considered a
+                medical diagnosis or a replacement for evaluation by
+                qualified healthcare and pathology professionals.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Navigation -->
+    <div class="text-center mt-5">
+
+        <a href="{{ url_for('upload') }}"
+           class="btn btn-primary px-4 me-2">
+
+            <i class="bi bi-cloud-upload"></i>
+            Start Analysis
+
+        </a>
+
+        <a href="{{ url_for('dashboard') }}"
+           class="btn btn-outline-secondary px-4">
+
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+.about-hero {
+    padding: 35px 15px 20px;
+}
+
+.about-hero h1 {
+    max-width: 900px;
+    margin: auto;
+    line-height: 1.2;
+}
+
+.about-card {
+    border-radius: 18px;
+}
+
+.about-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    background: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.objective-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 11px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.objective-item:last-child {
+    border-bottom: none;
+}
+
+.objective-item i {
+    color: #198754;
+    margin-top: 3px;
+}
+
+.about-workflow {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 12px;
+}
+
+.workflow-step {
+    flex: 1;
+    max-width: 180px;
+    text-align: center;
+    position: relative;
+}
+
+.workflow-number {
+    width: 35px;
+    height: 35px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background: #0d6efd;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.workflow-icon {
+    display: block;
+    font-size: 28px;
+    color: #0d6efd;
+    margin-bottom: 10px;
+}
+
+.workflow-step h5 {
+    font-weight: 700;
+}
+
+.workflow-step p {
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.workflow-line {
+    width: 45px;
+    height: 2px;
+    margin-top: 52px;
+    background: #dee2e6;
+    flex-shrink: 0;
+}
+
+.technology-card {
+    min-height: 125px;
+    padding: 20px;
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.25s ease;
+}
+
+.technology-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.technology-card i {
+    font-size: 27px;
+    color: #0d6efd;
+    margin-bottom: 8px;
+}
+
+.technology-card strong {
+    font-size: 15px;
+}
+
+.technology-card span {
+    color: #6c757d;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.xai-section {
+    padding: 40px;
+    border-radius: 20px;
+    background: linear-gradient(
+        135deg,
+        #f0f6ff,
+        #f8fbff
+    );
+    border: 1px solid #dcecff;
+}
+
+.xai-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #0d6efd;
+}
+
+.xai-section p {
+    color: #5f6368;
+    line-height: 1.7;
+}
+
+.xai-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+}
+
+.xai-circle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #0d6efd;
+    color: #0d6efd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.12);
+}
+
+.xai-arrow {
+    color: #0d6efd;
+    font-size: 25px;
+}
+
+.about-disclaimer {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px;
+}
+
+.about-disclaimer > i {
+    margin-top: 3px;
+}
+
+@media (max-width: 900px) {
+
+    .about-workflow {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .workflow-line {
+        width: 2px;
+        height: 30px;
+        margin: 0;
+    }
+
+    .workflow-step {
+        max-width: 300px;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .xai-section {
+        padding: 25px;
+    }
+
+    .xai-visual {
+        gap: 10px;
+    }
+
+    .xai-circle {
+        width: 70px;
+        height: 70px;
+        font-size: 27px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

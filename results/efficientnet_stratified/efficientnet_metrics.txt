@@ -1,0 +1,8 @@
+EFFICIENTNETB0 STRATIFIED EVALUATION
+==================================================
+
+Accuracy  : 60.14%
+Precision : 62.82%
+Recall    : 60.14%
+F1 Score  : 52.17%
+Macro AUC : 89.14%
