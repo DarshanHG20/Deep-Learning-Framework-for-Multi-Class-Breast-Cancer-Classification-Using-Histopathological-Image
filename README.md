@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Explainable Deep Learning Framework for Multi-Class Breast Cancer Classification and Interpretability Using Histopathological Images
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
@@ -455,3 +456,6 @@ If you utilize this framework, codebase, or findings in your academic research, 
 ## License
 
 This project is licensed under the MIT License for Academic Research and Educational Purposes.
+=======
+# Deep-Learning-Framework-for-Multi-Class-Breast-Cancer-Classification-Using-Histopathological-Image
+>>>>>>> ad36e5b5e5cf2cb81eeb4a6ea381f9aedc639e12
